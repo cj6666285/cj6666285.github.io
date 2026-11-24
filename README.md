@@ -67,7 +67,7 @@ python -m http.server 4173 --bind 127.0.0.1
 
 1. 登录 GitHub，确认当前账号为 cj6666285。
 2. 打开 https://github.com/new?name=cj6666285.github.io ，创建公开仓库 cj6666285.github.io，勾选添加 README。
-3. 在仓库选择 Add file → Upload files，上传本目录的 index.html、styles.css、app.js、data.js、favicon.svg 五个文件。文件必须位于仓库根目录，然后 Commit changes。
+3. 在仓库选择 Add file → Upload files，上传本目录的 index.html、styles.css、app.js、data.js、fx.js、favicon.svg 文件和 assets 文件夹。文件必须位于仓库根目录，然后 Commit changes。
 4. 打开仓库 Settings → Pages，Source 选择 Deploy from a branch，分支选择 main，目录选择 /(root)，点击 Save。
 5. 等待 Actions 中 Pages 部署成功，网站地址为 https://cj6666285.github.io/ 。当前仅准备好了站点文件，不代表网站已上线。
 
@@ -75,7 +75,7 @@ python -m http.server 4173 --bind 127.0.0.1
 
 ### 可选：GitHub Actions 发布
 
-如果通过 Git 推送本目录全部文件（含 .github），可在 Settings → Pages 把 Source 选择为 GitHub Actions。本目录的 deploy.yml 会把上述五个文件和 .nojekyll 发布，不会把 README 等说明文件带入产物。需要手动运行一次工作流，或提交一次 main 分支更新。网页上传发布与 Actions 发布任选一种。
+如果通过 Git 推送本目录全部文件（含 .github），可在 Settings → Pages 把 Source 选择为 GitHub Actions。本目录的 deploy.yml 会把站点文件、assets 素材和 .nojekyll 发布，不会把 README 等说明文件带入产物。需要手动运行一次工作流，或提交一次 main 分支更新。网页上传发布与 Actions 发布任选一种。
 
 ## 自定义
 
@@ -85,3 +85,16 @@ python -m http.server 4173 --bind 127.0.0.1
 - app.js：详情渲染、搜索、模板内容与页面切换。
 
 本站不包含特定工程资料，后续按自己的项目逐步填充。
+
+## 动态科技主题与画廊图片
+
+首页为深色科技主题，包含本地技术图形的 3D 纵深画廊、鼠标视差与滚动加速。画廊可暂停；页面不在视口内、切换到其他栏目或浏览器标签页不可见时，动画停止。系统开启“减少动态效果”时默认显示静态画廊，手机端降低模糊效果。
+
+- `fx.js` 顶部 `CONFIG.images`：画廊图片相对路径与图片标签。
+- `assets/images/`：当前六张本地 SVG 技术图形，均为设计装饰，不代表实际完成的项目。
+- 替换实拍照片：将 WebP/JPG 图片放入 `assets/images/`，再修改 `CONFIG.images` 中对应 `src`。推荐横向照片，约 1200 × 800 像素，单张尽量小于 300 KB。照片展示不裁切原文件，画廊缩略图按横向卡片裁切。
+- `CONFIG.cycleSeconds`：一轮流动的秒数，越大越慢。
+- `CONFIG.scrollBoost`、`CONFIG.parallax`：滚动加速与鼠标视差强度。
+- 更新网站时还需要上传 `fx.js` 和 `assets` 文件夹。现有从 `main` 根目录发布的 Pages 配置会自动包含这些文件。
+
+页面保留 GitHub 与两个抖音入口，项目与日志内容仍由 `data.js` 维护。首页动效不会拦截滚轮或触摸滚动。
