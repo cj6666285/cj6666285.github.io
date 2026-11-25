@@ -36,7 +36,7 @@
       ['经验与后续',['可以复用的检查清单','未解决的问题与下一步验证计划']]
     ]}
   };
-  let category='全部',currentTemplate='software',toastTimer;
+  let category=categoryNames[0]||'',currentTemplate='software',toastTimer;
   function node(tag,className,text){const n=document.createElement(tag);if(className)n.className=className;if(text!==undefined)n.textContent=text;return n;}
   function url(value){if(typeof value!=='string')return null;try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:null;}catch{return null;}}
   function external(value,text,className){const href=url(value);if(!href)return null;const a=node('a',className,text);a.href=href;a.target='_blank';a.rel='noopener noreferrer';return a;}
@@ -70,20 +70,20 @@
     const categories=configuredCategories.length?configuredCategories:categoryNames.map(name=>({name}));
     $('#project-categories').replaceChildren(...categories.map(c=>{
       const button=node('button','category-card'+(category===c.name?' selected':''));button.type='button';button.setAttribute('aria-pressed',String(category===c.name));
-      const img=makeImage(c.cover||'./assets/images/circuit.svg','');if(img)button.append(img);const body=node('span','category-card-content'),icon=node('span','category-icon '+(c.accent==='amber'?'amber':''),c.icon||c.name.slice(0,1));const copy=node('span','category-card-copy');copy.append(node('strong','',c.name),node('span','',projects.filter(p=>p.category===c.name).length+' 篇记录'),node('small','',c.description||'项目实践与设计记录'));body.append(icon,copy,node('span','category-arrow','↗'));button.append(body);button.onclick=()=>{setCategory(category===c.name?'全部':c.name);};return button;
+      const img=makeImage(c.cover||'./assets/images/circuit.svg','');if(img)button.append(img);const body=node('span','category-card-content'),icon=node('span','category-icon '+(c.accent==='amber'?'amber':''),c.icon||c.name.slice(0,1));const copy=node('span','category-card-copy');copy.append(node('strong','',c.name),node('span','',projects.filter(p=>p.category===c.name).length+' 篇记录'),node('small','',c.description||'项目实践与设计记录'));body.append(icon,copy,node('span','category-arrow','↗'));button.append(body);button.onclick=()=>{setCategory(c.name);};return button;
     }));
   }
   function renderProjects(){
     renderCategoryCards();
-    $('#filters').replaceChildren(...['全部',...categoryNames].map(name=>{const b=node('button',name===category?'selected':'',name);b.type='button';b.dataset.category=name;b.setAttribute('aria-pressed',String(name===category));b.onclick=()=>setCategory(name);return b;}));
+    $('#filters').replaceChildren(...categoryNames.map(name=>{const b=node('button',name===category?'selected':'',name);b.type='button';b.dataset.category=name;b.setAttribute('aria-pressed',String(name===category));b.onclick=()=>setCategory(name);return b;}));
     const query=$('#project-search').value.trim().toLocaleLowerCase();const usingPreviews=projects.length===0;
     const pool=usingPreviews?previews:projects;
-    const filtered=pool.filter(p=>(category==='全部'||p.category===category)&&[p.title,p.summary,...(p.tags||[])].join(' ').toLocaleLowerCase().includes(query));
+    const filtered=pool.filter(p=>p.category===category&&[p.title,p.summary,...(p.tags||[])].join(' ').toLocaleLowerCase().includes(query));
     $('#project-grid').replaceChildren(...filtered.map(projectCard));$('#projects-empty').hidden=filtered.length>0;
     $('#projects-empty h2').textContent=query?'没有找到符合条件的记录':'这里还没有记录';
     $('#projects-empty p').textContent=query?'试试其他关键词，或切换专题。':'从一份模板开始，留下自己的设计与实践。';
     $('#preview-notice').hidden=!usingPreviews||!filtered.length;
-    $('#archive-title').textContent=category==='全部'?'全部记录':category+'专题';
+    $('#archive-title').textContent=category?category+'专题':'项目记录';
     $('#archive-count').textContent=usingPreviews?`0 篇项目记录 · ${filtered.length} 份模板预览`:`${filtered.length} 篇记录`;
     $('#recent-projects').replaceChildren(...projects.slice(0,3).map(projectCard));$('#home-empty').hidden=projects.length>0;
     $('#count-projects').textContent=projects.length;
