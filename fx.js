@@ -27,7 +27,7 @@
   let focused=false,hovered=false,dragging=false,dragStart=0,dragAngle=0,dragMoved=false,suppressClick=false;
   let active=0,viewportWidth=innerWidth,viewportHeight=innerHeight,particles=[];
   const pointer={x:-10000,y:-10000};
-  const cardNodes=[],selectors=[];
+  const cardNodes=[],selectors=[],photoStates=[],retryPhotos=[];
   const step=2*Math.PI/CONFIG.images.length;
   stage.style.perspective=CONFIG.perspective+'px';
   container.style.perspective=CONFIG.perspective+'px';
@@ -40,6 +40,7 @@
 
   function showPhoto(index) {
     suppressClick=false;
+    if(photoStates[index]!=='ready'){if(photoStates[index]==='error')retryPhotos[index]();return;}
     const photo=CONFIG.images[index];
     $('#photo-title').textContent=photo.label;
     $('#photo-preview').src=photo.src;$('#photo-preview').alt=photo.alt;
@@ -49,7 +50,22 @@
     const card=document.createElement('button');card.type='button';card.className='orbit-card';
     card.setAttribute('aria-label','查看大图：'+photo.label);
     const frame=document.createElement('span');frame.className='orbit-image-frame';
-    const img=document.createElement('img');img.src=photo.src;img.alt=photo.alt;img.width=photo.width;img.height=photo.height;img.draggable=false;img.decoding='async';img.loading=index===0?'eager':'lazy';frame.append(img);
+    // All six images belong to one moving gallery. Native lazy loading can defer
+    // images behind the 3D stage until after their cards have rotated forward.
+    const img=document.createElement('img');img.alt=photo.alt;img.width=photo.width;img.height=photo.height;img.draggable=false;img.decoding='async';img.loading='eager';img.fetchPriority=index===0?'high':'auto';
+    const status=document.createElement('span');status.className='orbit-image-status';status.setAttribute('role','status');
+    frame.append(img,status);
+    function imageState(state){
+      photoStates[index]=state;card.dataset.imageState=state;
+      card.setAttribute('aria-busy',String(state==='loading'));
+      card.setAttribute('aria-label',(state==='error'?'重新加载照片：':'查看大图：')+photo.label);
+      status.textContent=state==='loading'?'照片加载中…':state==='error'?'加载失败，点击重试':'';
+      status.hidden=state==='ready';
+    }
+    img.addEventListener('load',async()=>{try{await img.decode();}catch{}if(img.naturalWidth)imageState('ready');else imageState('error');});
+    img.addEventListener('error',()=>imageState('error'));
+    retryPhotos[index]=()=>{imageState('loading');img.src=photo.src+(photo.src.includes('?')?'&':'?')+'retry='+Date.now();};
+    imageState('loading');img.src=photo.src;
     const caption=document.createElement('span');caption.className='orbit-caption';
     const number=document.createElement('span');number.textContent=String(index+1).padStart(2,'0');
     const label=document.createElement('span');label.textContent=photo.label;

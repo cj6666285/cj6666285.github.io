@@ -4,8 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="曼波大王的嵌入式软件与硬件项目记录：项目档案、调试过程与技术复盘。">
 <meta name="theme-color" content="#080b0d"><title>曼波大王 · 嵌入式项目记录</title>
-<link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./styles.css">
-<script src="./data.js" defer></script><script src="./app.js" defer></script><script src="./fx.js" defer></script>
+<link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./styles.css?v=home-polish-1">
+<script src="./data.js" defer></script><script src="./app.js?v=home-polish-1" defer></script><script src="./fx.js?v=home-polish-1" defer></script>
 </head>
 <body>
 <canvas id="particle-background" aria-hidden="true"></canvas>
@@ -17,9 +17,9 @@
   <div class="hero">
     <div class="hero-copy">
       <div class="eyebrow"><span class="signal"></span> 曼波大王的个人实验室 <span class="eyebrow-slash">/</span> EST. 2026</div>
-      <h1 id="overview-title"><span class="hero-line">MAKE IDEAS.</span><br><span class="hero-outline">BUILD</span> <span class="hero-accent">REAL.</span></h1>
+      <h1 id="overview-title" class="personal-title"><span class="hero-line">曼波大王</span><br><span class="hero-accent">个人网站</span></h1>
       <div class="hero-chinese">让想法，接入现实<span>_</span></div>
-      <p>代码与电路之间，是我的探索现场。<br>记录嵌入式软件、硬件设计，以及每一次突破的过程。</p>
+      <p>不是臭企鹅，胜似臭企鹅。<br>记录嵌入式软件、硬件设计，以及每一次突破的过程。</p>
       <div class="actions"><a class="button primary" href="#projects">进入项目档案 <span>↗</span></a><a class="button secondary" href="#about">关于我 <span>↗</span></a></div>
       <div class="hero-caption"><span><i></i> INDEPENDENT EXPLORER</span><span>SOFTWARE × HARDWARE</span></div>
     </div>
@@ -35,9 +35,11 @@
       <div class="gallery-bottom"><span><i class="live-led"></i><span id="motion-label">ORBIT / AUTO ROTATE</span></span><button id="motion-toggle" class="motion-toggle" aria-pressed="false" aria-label="暂停页面动效">Ⅱ 暂停动效</button></div>
     </div>
   </div>
-  <div class="tech-strip" aria-label="关注的技术领域"><span>STM32</span><i>+</i><span>FIRMWARE</span><i>+</i><span>PCB DESIGN</span><i>+</i><span>RTOS</span><i>+</i><span>SIGNAL & SYSTEMS</span><i>+</i><span>DEBUGGING</span><span class="strip-tail">SCROLL TO EXPLORE ↓</span></div>
-  <div class="metrics"><div><strong id="count-projects">0</strong><span>项目档案</span></div><div><strong id="count-software">0</strong><span>含软件设计</span></div><div><strong id="count-hardware">0</strong><span>含硬件设计</span></div></div>
-  <div class="quote-strip"><span>↳</span><p>从 0 到 1，不只有结果。<br><strong>每一个解决问题的过程，都值得被记录。</strong></p><a href="#about">MEET THE MAKER ↗</a></div>
+  <section class="interest-marquee" aria-labelledby="interest-title">
+<div class="interest-heading"><div><span class="eyebrow">LEARNING / BUILDING / EXPLORING</span><h2 id="interest-title">兴趣不停，探索不止<span>.</span></h2></div><span class="interest-note">一些热爱，一点日常</span></div>
+<div class="tag-marquee"><div class="tag-track"><div class="tag-group"><span class="interest-tag"><i aria-hidden="true">✦</i>STM32</span><span class="interest-tag"><i aria-hidden="true">+</i>嵌入式开发</span><span class="interest-tag"><i aria-hidden="true">+</i>C / C++</span><span class="interest-tag"><i aria-hidden="true">✦</i>硬件设计</span><span class="interest-tag"><i aria-hidden="true">+</i>PCB DESIGN</span><span class="interest-tag"><i aria-hidden="true">+</i>RTOS</span><span class="interest-tag"><i aria-hidden="true">✦</i>驱动调试</span><span class="interest-tag"><i aria-hidden="true">+</i>串口通信</span><span class="interest-tag"><i aria-hidden="true">+</i>项目实践</span><span class="interest-tag"><i aria-hidden="true">✦</i>电子竞赛</span><span class="interest-tag"><i aria-hidden="true">+</i>学习记录</span><span class="interest-tag"><i aria-hidden="true">+</i>保持好奇</span></div><div class="tag-group" aria-hidden="true"><span class="interest-tag"><i aria-hidden="true">✦</i>STM32</span><span class="interest-tag"><i aria-hidden="true">+</i>嵌入式开发</span><span class="interest-tag"><i aria-hidden="true">+</i>C / C++</span><span class="interest-tag"><i aria-hidden="true">✦</i>硬件设计</span><span class="interest-tag"><i aria-hidden="true">+</i>PCB DESIGN</span><span class="interest-tag"><i aria-hidden="true">+</i>RTOS</span><span class="interest-tag"><i aria-hidden="true">✦</i>驱动调试</span><span class="interest-tag"><i aria-hidden="true">+</i>串口通信</span><span class="interest-tag"><i aria-hidden="true">+</i>项目实践</span><span class="interest-tag"><i aria-hidden="true">✦</i>电子竞赛</span><span class="interest-tag"><i aria-hidden="true">+</i>学习记录</span><span class="interest-tag"><i aria-hidden="true">+</i>保持好奇</span></div></div></div>
+<div class="tag-marquee tag-marquee-reverse"><div class="tag-track"><div class="tag-group"><span class="interest-tag"><i aria-hidden="true">+</i>曼波大王</span><span class="interest-tag"><i aria-hidden="true">+</i>不是臭企鹅</span><span class="interest-tag"><i aria-hidden="true">✦</i>胜似臭企鹅</span><span class="interest-tag"><i aria-hidden="true">+</i>学习日常</span><span class="interest-tag"><i aria-hidden="true">+</i>代码与电路</span><span class="interest-tag"><i aria-hidden="true">✦</i>动手实践</span><span class="interest-tag"><i aria-hidden="true">+</i>灵感碎片</span><span class="interest-tag"><i aria-hidden="true">+</i>一起探索</span><span class="interest-tag"><i aria-hidden="true">✦</i>记录成长</span><span class="interest-tag"><i aria-hidden="true">+</i>慢慢积累</span><span class="interest-tag"><i aria-hidden="true">+</i>HELLO WORLD</span><span class="interest-tag"><i aria-hidden="true">✦</i>KEEP BUILDING</span></div><div class="tag-group" aria-hidden="true"><span class="interest-tag"><i aria-hidden="true">+</i>曼波大王</span><span class="interest-tag"><i aria-hidden="true">+</i>不是臭企鹅</span><span class="interest-tag"><i aria-hidden="true">✦</i>胜似臭企鹅</span><span class="interest-tag"><i aria-hidden="true">+</i>学习日常</span><span class="interest-tag"><i aria-hidden="true">+</i>代码与电路</span><span class="interest-tag"><i aria-hidden="true">✦</i>动手实践</span><span class="interest-tag"><i aria-hidden="true">+</i>灵感碎片</span><span class="interest-tag"><i aria-hidden="true">+</i>一起探索</span><span class="interest-tag"><i aria-hidden="true">✦</i>记录成长</span><span class="interest-tag"><i aria-hidden="true">+</i>慢慢积累</span><span class="interest-tag"><i aria-hidden="true">+</i>HELLO WORLD</span><span class="interest-tag"><i aria-hidden="true">✦</i>KEEP BUILDING</span></div></div></div>
+  </section>
 </section>
 <section id="view-projects" class="view" hidden aria-labelledby="projects-title">
 <div class="eyebrow">PROJECT JOURNAL / DESIGN · BUILD · DOCUMENT</div>
@@ -59,7 +61,7 @@
 </a>
 <a class="connect-card connect-card-wide" href="https://v.douyin.com/NrMRS0yqG3I/" target="_blank" rel="noopener noreferrer">
 <div class="connect-card-top"><span class="platform-icon platform-douyin"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M18 5h4c.3 3.1 2 4.9 5 5.5v4a12 12 0 0 1-5-1.8V23a7.5 7.5 0 1 1-7.5-7.5v4a3.5 3.5 0 1 0 3.5 3.5Z" fill="#25f4ee" transform="translate(-1 1)"/><path d="M18 5h4c.3 3.1 2 4.9 5 5.5v4a12 12 0 0 1-5-1.8V23a7.5 7.5 0 1 1-7.5-7.5v4a3.5 3.5 0 1 0 3.5 3.5Z" fill="#fe2c55" transform="translate(1 -1)"/><path d="M18 5h4c.3 3.1 2 4.9 5 5.5v4a12 12 0 0 1-5-1.8V23a7.5 7.5 0 1 1-7.5-7.5v4a3.5 3.5 0 1 0 3.5 3.5Z" fill="#fff"/></svg></span><span class="connect-kicker">SHORT VIDEO / 02</span></div>
-<h2>抖音 · ②</h2><p>另一扇分享窗口，记录灵感与生活碎片。</p><span class="connect-action">打开抖音链接 <span aria-hidden="true">↗</span></span>
+<h2>抖音 · ②</h2><p>记录学习和竞赛</p><span class="connect-action">打开抖音链接 <span aria-hidden="true">↗</span></span>
 </a>
 <a class="connect-card" href="https://github.com/cj6666285" target="_blank" rel="noopener noreferrer">
 <div class="connect-card-top"><span class="platform-icon platform-github"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill="currentColor" transform="translate(2 2) scale(1.17)" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.3c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.9 18.3 5.2 18.3 5.2c.6 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.4c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"/></svg></span><span class="connect-kicker">CODE / PROJECTS</span></div>
@@ -76,8 +78,8 @@
 </div>
 </section>
 <footer><span>曼波大王 <i>/</i> EMBEDDED SYSTEMS JOURNAL</span><span>从动手开始，向理解靠近。<i>·</i><a href="https://github.com/cj6666285" target="_blank" rel="noopener noreferrer">@cj6666285 ↗</a></span></footer>
-</main><dialog id="photo-dialog" class="photo-dialog" aria-labelledby="photo-title"><div class="photo-dialog-bar"><h2 id="photo-title">照片预览</h2><button id="photo-close" class="photo-close" aria-label="关闭照片预览">×</button></div><img id="photo-preview" src="./assets/images/gallery-01.webp" alt=""><p>按 Esc 或点击关闭按钮返回</p></dialog><dialog id="contact-dialog" class="contact-dialog" aria-labelledby="contact-title" aria-describedby="contact-instructions">
-<div class="contact-dialog-head"><span class="eyebrow">LET’S CONNECT</span><button id="contact-close" class="photo-close" type="button" aria-label="关闭联系方式">×</button></div>
+</main><dialog id="photo-dialog" class="photo-dialog" aria-labelledby="photo-title"><div class="photo-dialog-bar"><h2 id="photo-title">照片预览</h2><button id="photo-close" class="photo-close" aria-label="关闭照片预览"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><img id="photo-preview" src="./assets/images/gallery-01.webp" alt=""><p>按 Esc 或点击关闭按钮返回</p></dialog><dialog id="contact-dialog" class="contact-dialog" aria-labelledby="contact-title" aria-describedby="contact-instructions">
+<div class="contact-dialog-head"><span class="eyebrow">LET’S CONNECT</span><button id="contact-close" class="photo-close" type="button" aria-label="关闭联系方式"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
 <h2 id="contact-title">扫码添加好友</h2><p id="contact-instructions">扫一扫，添加我为好友。</p>
 <div class="contact-qr-frame"><img id="contact-qr" alt="" width="705" height="705"></div>
 <p id="contact-image-error" role="status" hidden>二维码暂时无法显示，请稍后重试。</p>

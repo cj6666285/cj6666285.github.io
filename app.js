@@ -57,9 +57,6 @@
     $('#preview-notice').hidden=!usingPreviews||!filtered.length;
     $('#archive-title').textContent=category?category+'专题':'项目记录';
     $('#archive-count').textContent=usingPreviews?`0 篇项目记录 · ${filtered.length} 份框架预览`:`${filtered.length} 篇记录`;
-    $('#count-projects').textContent=projects.length;
-    $('#count-software').textContent=projects.filter(p=>['软件','软硬件'].includes(p.discipline||p.category)).length;
-    $('#count-hardware').textContent=projects.filter(p=>['硬件','软硬件'].includes(p.discipline||p.category)).length;
   }
   function clearToc(){if(tocObserver){tocObserver.disconnect();tocObserver=null;}currentSectionIds=[];}
   function renderDetail(id){
