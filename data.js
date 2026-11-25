@@ -1,11 +1,10 @@
-// 真实项目放 projects，开发日志放 logs。模板预览单独配置，不计入真实项目统计。
+// 真实项目放 projects，文章框架放 projectTemplates，不计入真实项目统计。
 window.LAB_DATA = {
   categories: [
     { name:'嵌入式', description:'固件架构 / 外设驱动 / 系统调试', cover:'./assets/images/circuit.svg', icon:'嵌', accent:'cyan' },
     { name:'电源', description:'电路设计 / 电能转换 / 测试验证', cover:'./assets/images/schematic.svg', icon:'电', accent:'amber' }
   ],
   projects: [],
-  logs: [],
   projectTemplates: [
     {
       id:'preview-firmware', title:'嵌入式软件项目：从需求到驱动与系统设计', category:'嵌入式', discipline:'软件',

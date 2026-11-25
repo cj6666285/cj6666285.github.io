@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="CJ 的嵌入式软件与硬件项目记录：项目档案、开发日志、调试过程与技术复盘。">
+<meta name="description" content="CJ 的嵌入式软件与硬件项目记录：项目档案、调试过程与技术复盘。">
 <meta name="theme-color" content="#080b0d"><title>CJ LAB · 嵌入式项目记录</title>
 <link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./styles.css">
 <script src="./data.js" defer></script><script src="./app.js" defer></script><script src="./fx.js" defer></script>
@@ -11,7 +11,7 @@
 <canvas id="particle-background" aria-hidden="true"></canvas>
 <div class="ambient" aria-hidden="true"><div class="ambient-grid"></div><div class="ambient-orb"></div></div>
 <a class="skip" href="#main">跳到内容</a>
-<header class="header"><a class="brand" href="#overview"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M10 8H6v16h4M22 8h4v16h-4M13 21l6-10" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span>CJ LAB<small>EMBEDDED SYSTEMS JOURNAL</small></span></a><nav aria-label="主导航"><a href="#overview">总览</a><a href="#projects">项目档案</a><a href="#logs">开发日志</a><a href="#templates">记录模板</a><a href="#about">关于</a></nav><div class="social-links" role="group" aria-label="社交平台"><a class="github-link" href="https://github.com/cj6666285" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a class="github-link" href="https://v.douyin.com/aUGkqMEhm6Y/" target="_blank" rel="noopener noreferrer" aria-label="抖音链接一，在新标签页打开">抖音① ↗</a><a class="github-link" href="https://v.douyin.com/NrMRS0yqG3I/" target="_blank" rel="noopener noreferrer" aria-label="抖音链接二，在新标签页打开">抖音② ↗</a></div></header>
+<header class="header"><a class="brand" href="#overview"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M10 8H6v16h4M22 8h4v16h-4M13 21l6-10" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span>CJ LAB<small>EMBEDDED SYSTEMS JOURNAL</small></span></a><nav aria-label="主导航"><a href="#overview">总览</a><a href="#projects">项目档案</a><a href="#about">关于</a></nav><div class="social-links" role="group" aria-label="社交平台"><a class="github-link" href="https://github.com/cj6666285" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a class="github-link" href="https://v.douyin.com/aUGkqMEhm6Y/" target="_blank" rel="noopener noreferrer" aria-label="抖音链接一，在新标签页打开">抖音① ↗</a><a class="github-link" href="https://v.douyin.com/NrMRS0yqG3I/" target="_blank" rel="noopener noreferrer" aria-label="抖音链接二，在新标签页打开">抖音② ↗</a></div></header>
 <main id="main" tabindex="-1">
 <section id="view-overview" class="view" aria-labelledby="overview-title">
   <div class="hero">
@@ -20,7 +20,7 @@
       <h1 id="overview-title"><span class="hero-line">MAKE IDEAS.</span><br><span class="hero-outline">BUILD</span> <span class="hero-accent">REAL.</span></h1>
       <div class="hero-chinese">让想法，接入现实<span>_</span></div>
       <p>代码与电路之间，是我的探索现场。<br>记录嵌入式软件、硬件设计，以及每一次突破的过程。</p>
-      <div class="actions"><a class="button primary" href="#projects">进入项目档案 <span>↗</span></a><a class="button secondary" href="#templates">开始记录 <span>＋</span></a></div>
+      <div class="actions"><a class="button primary" href="#projects">进入项目档案 <span>↗</span></a><a class="button secondary" href="#about">关于我 <span>↗</span></a></div>
       <div class="hero-caption"><span><i></i> INDEPENDENT EXPLORER</span><span>SOFTWARE × HARDWARE</span></div>
     </div>
     <div class="gallery-module orbit-module">
@@ -36,22 +36,19 @@
     </div>
   </div>
   <div class="tech-strip" aria-label="关注的技术领域"><span>STM32</span><i>+</i><span>FIRMWARE</span><i>+</i><span>PCB DESIGN</span><i>+</i><span>RTOS</span><i>+</i><span>SIGNAL & SYSTEMS</span><i>+</i><span>DEBUGGING</span><span class="strip-tail">SCROLL TO EXPLORE ↓</span></div>
-  <div class="metrics"><div><strong id="count-projects">0</strong><span>项目档案</span></div><div><strong id="count-software">0</strong><span>含软件设计</span></div><div><strong id="count-hardware">0</strong><span>含硬件设计</span></div><div><strong id="count-logs">0</strong><span>开发记录</span></div></div>
-  <div class="section-head"><div><div class="eyebrow">01 / THE PROJECT ARCHIVE</div><h2>灵感落地，<span class="muted-heading">过程留痕。</span></h2></div><a class="text-link" href="#projects">全部项目 ↗</a></div><div id="recent-projects" class="project-grid"></div><div id="home-empty" class="start-grid"><a class="start-card" href="#templates/software"><span class="card-index">01 / SOFTWARE</span><div class="start-visual software-visual" aria-hidden="true"><span>void <b>build_ideas</b>(void) {</span><span>&nbsp; <i>while</i> (curiosity) {</span><span>&nbsp; &nbsp; explore();</span><span>&nbsp; }</span><span>}</span></div><h3>嵌入式软件</h3><p>固件架构、驱动实现、通信协议、RTOS 与调试过程。</p><span class="start-foot">查看软件记录模板 <b>↗</b></span></a><a class="start-card" href="#templates/hardware"><span class="card-index">02 / HARDWARE</span><div class="start-visual hardware-visual" aria-hidden="true"><span class="mini-chip">IC</span><i></i><i></i><i></i></div><h3>硬件设计</h3><p>需求与选型、原理图、PCB、打样验证与硬件迭代。</p><span class="start-foot">查看硬件记录模板 <b>↗</b></span></a><a class="start-card" href="#templates/debug"><span class="card-index">03 / DEBUGGING</span><div class="start-visual debug-visual" aria-hidden="true"><svg viewBox="0 0 300 90"><path class="wave-grid" d="M0 22H300M0 45H300M0 68H300M50 0V90M100 0V90M150 0V90M200 0V90M250 0V90"/><path class="wave-line" d="M0 45H26V15H70V72H112V25H150V62H194V15H235V70H275V45H300"/></svg><span>CH1 / SIGNAL DETECTED</span></div><h3>调试与复盘</h3><p>现象、假设、实验和结论，把问题变成可复用的经验。</p><span class="start-foot">查看调试记录模板 <b>↗</b></span></a></div>
+  <div class="metrics"><div><strong id="count-projects">0</strong><span>项目档案</span></div><div><strong id="count-software">0</strong><span>含软件设计</span></div><div><strong id="count-hardware">0</strong><span>含硬件设计</span></div></div>
   <div class="quote-strip"><span>↳</span><p>从 0 到 1，不只有结果。<br><strong>每一个解决问题的过程，都值得被记录。</strong></p><a href="#about">MEET THE MAKER ↗</a></div>
 </section>
 <section id="view-projects" class="view" hidden aria-labelledby="projects-title">
 <div class="eyebrow">PROJECT JOURNAL / DESIGN · BUILD · DOCUMENT</div>
-<div class="page-head"><div><h1 id="projects-title">项目与实践<span class="title-dot">.</span></h1><p>从电路到代码，用一篇篇记录串起完整的实践过程。</p></div><a class="button secondary" href="#templates">记录模板 ↗</a></div>
+<div class="page-head"><div><h1 id="projects-title">项目与实践<span class="title-dot">.</span></h1><p>从电路到代码，用一篇篇记录串起完整的实践过程。</p></div></div>
 <div id="project-categories" class="category-grid" aria-label="项目专题"></div>
 <div class="archive-heading"><div><span class="eyebrow">THE ARTICLE ARCHIVE</span><h2 id="archive-title">嵌入式专题</h2></div><span id="archive-count" class="archive-count" role="status"></span></div>
 <div class="toolbar"><div class="filters" id="filters" role="group" aria-label="项目分类"></div><label class="search"><span aria-hidden="true">⌕</span><input id="project-search" type="search" placeholder="搜索文章、芯片或技术…" aria-label="搜索项目"></label></div>
-<p id="preview-notice" class="preview-notice" hidden>以下为记录模板预览，展示文章结构；实际项目内容可按模板逐步填入。</p>
-<div id="project-grid" class="project-grid article-grid"></div><div id="projects-empty" class="empty" hidden><span aria-hidden="true">⌗</span><h2>这里还没有记录</h2><p>从一份模板开始，留下自己的设计与实践。</p><a class="button primary" href="#templates">选择记录模板 ↗</a></div>
+<p id="preview-notice" class="preview-notice" hidden>以下为文章框架预览，展示项目的组织方式；实际内容可逐步填入。</p>
+<div id="project-grid" class="project-grid article-grid"></div><div id="projects-empty" class="empty" hidden><span aria-hidden="true">⌗</span><h2>这里还没有记录</h2><p>后续会在这里记录自己的设计与实践。</p></div>
 </section>
 <section id="view-project" class="view" hidden aria-label="项目详情"><a class="back" href="#projects">← 返回项目档案</a><article id="project-detail"></article></section>
-<section id="view-logs" class="view" hidden aria-labelledby="logs-title"><div class="eyebrow">DEVELOPMENT JOURNAL</div><div class="page-head"><div><h1 id="logs-title">开发日志<span class="title-dot">.</span></h1><p>留住每一个“原来如此”的瞬间。</p></div><a class="button secondary" href="#templates/debug">调试记录模板 ↗</a></div><div id="logs-list"></div><div id="logs-empty" class="empty"><span aria-hidden="true">✎</span><h2>让解决问题的过程，被看见。</h2><p>一次驱动联调、一张波形、一个设计决定，都值得留下记录。</p><a class="button primary" href="#templates/debug">从调试模板开始 ↗</a></div></section>
-<section id="view-templates" class="view" hidden aria-labelledby="templates-title"><div class="eyebrow">A STRUCTURE FOR YOUR NEXT BUILD</div><div class="page-head"><div><h1 id="templates-title">记录模板<span class="title-dot">.</span></h1><p>把项目拆成清晰的章节，之后慢慢填满。</p></div></div><div id="template-tabs" class="filters" role="group" aria-label="记录模板"><button data-template="software">软件项目</button><button data-template="hardware">硬件项目</button><button data-template="debug">调试记录</button></div><div class="template-layout"><aside class="template-aside"><span class="eyebrow">DOCUMENT OUTLINE</span><h2 id="template-name"></h2><p id="template-description"></p><button class="button primary" id="copy-template">复制 Markdown 模板</button><button class="button secondary" id="download-template">下载模板 ↓</button><span class="template-note">适合放进项目 README、个人笔记或 GitHub 仓库。</span></aside><div id="template-sections" class="template-sections"></div></div></section>
 <section id="view-about" class="view" hidden aria-labelledby="about-title"><div class="eyebrow">ABOUT THE WORKBENCH</div><div class="about-grid"><div><h1 id="about-title">你好，我是 CJ。<br><span>这是我的数字工作台。</span></h1><p>用这个空间记录嵌入式软件与硬件的学习和项目实践。从一个驱动、一种接口、一块电路板开始，慢慢积累属于自己的工程经验。</p><p>这里会逐步放进项目介绍、设计选择、开发记录、测试结果和复盘。每一条记录，都是下一次出发的起点。</p><a class="button primary" href="https://github.com/cj6666285" target="_blank" rel="noopener noreferrer">在 GitHub 找到我 ↗</a></div><div class="about-card"><span class="eyebrow">ON THIS WORKBENCH</span><div><b>01</b><span>软件 / Firmware<small>C、驱动、协议、系统与工具</small></span></div><div><b>02</b><span>硬件 / Hardware<small>电路、PCB、接口与测量</small></span></div><div><b>03</b><span>记录 / Documentation<small>实验、验证、调试与复盘</small></span></div></div></div></section>
 <footer><span>CJ LAB <i>/</i> EMBEDDED SYSTEMS JOURNAL</span><span>从动手开始，向理解靠近。<i>·</i><a href="https://github.com/cj6666285" target="_blank" rel="noopener noreferrer">@cj6666285 ↗</a></span></footer>
 </main><dialog id="photo-dialog" class="photo-dialog" aria-labelledby="photo-title"><div class="photo-dialog-bar"><h2 id="photo-title">照片预览</h2><button id="photo-close" class="photo-close" aria-label="关闭照片预览">×</button></div><img id="photo-preview" src="./assets/images/gallery-01.webp" alt=""><p>按 Esc 或点击关闭按钮返回</p></dialog><div id="toast" class="toast" role="status" hidden></div></body></html>
