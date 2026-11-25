@@ -101,7 +101,7 @@
       if(currentProject!==id||!previousDetailVisible)title=renderDetail(id);else title=$('#project-detail h1')?.textContent||'项目详情';
     }else{clearToc();currentProject=null;}
     $$('.header nav a').forEach(a=>{const selected=a.hash==='#'+(view==='project'?'projects':view);a.classList.toggle('active',selected);if(selected)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
-    document.title=title+' · CJ LAB';
+    document.title=title+' · 曼波大王';
     const anchor=view==='project'&&currentSectionIds.includes(parts[2])?document.getElementById(parts[2]):null;
     if(anchor)requestAnimationFrame(()=>anchor.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'}));else window.scrollTo(0,0);
     updateProgress();
