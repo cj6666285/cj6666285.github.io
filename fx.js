@@ -1,89 +1,146 @@
 'use strict';
 (() => {
-  // Replace the local image paths below with your own project photos when ready.
+  // Gallery images and animation settings. Keep all image paths relative to this site.
   const CONFIG = {
-    cycleSeconds: 32,
-    scrollBoost: 3.2,
-    parallax: 17,
-    perspective: 760,
+    cycleSeconds: 24,
+    perspective: 900,
+    particles: { desktop: 72, mobile: 30, linkDistance: 120, pointerDistance: 145 },
     images: [
-      {src:'./assets/images/chip.svg', label:'01 / MICROCONTROLLER'},
-      {src:'./assets/images/circuit.svg', label:'02 / PCB DESIGN'},
-      {src:'./assets/images/signal.svg', label:'03 / SIGNAL ANALYSIS'},
-      {src:'./assets/images/firmware.svg', label:'04 / FIRMWARE'},
-      {src:'./assets/images/system.svg', label:'05 / SYSTEM DESIGN'},
-      {src:'./assets/images/schematic.svg', label:'06 / HARDWARE'}
+      { src:'./assets/images/gallery-01.webp', label:'雪日 · 眼镜', alt:'戴着黑框眼镜、站在雪景前的企鹅角色插画', width:1184, height:1200 },
+      { src:'./assets/images/gallery-02.webp', label:'夏日 · 小确幸', alt:'拿着汽水和巧克力冰淇淋的企鹅角色插画', width:1056, height:1200 },
+      { src:'./assets/images/gallery-03.webp', label:'元气 · 瞬间', alt:'粉色短发卡通角色的元气表情插画', width:1200, height:675 }
     ]
   };
-  const stage=document.querySelector('#tunnel');
-  const container=document.querySelector('#tunnel-cards');
-  const button=document.querySelector('#motion-toggle');
-  if(!stage||!container||!button)return;
+  const $ = s => document.querySelector(s);
+  const stage = $('#orbit-stage'), container = $('#orbit-cards'), canvas = $('#particle-background');
+  const toggle = $('#motion-toggle'), dialog = $('#photo-dialog');
+  if (!stage || !container || !canvas || !toggle || !dialog) return;
+  const ctx = canvas.getContext('2d');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const fine = matchMedia('(pointer: fine)');
+  let userPaused = false;
+  try { userPaused = sessionStorage.getItem('cj-lab-motion-paused') === 'true'; } catch {}
+  let raf=0,last=0,angle=0,targetAngle=null,stageVisible=false,width=stage.clientWidth;
+  let focused=false,hovered=false,dragging=false,dragStart=0,dragAngle=0,dragMoved=false,suppressClick=false;
+  let active=0,viewportWidth=innerWidth,viewportHeight=innerHeight,particles=[];
+  const pointer={x:-10000,y:-10000};
+  const cardNodes=[],selectors=[];
+  const step=2*Math.PI/CONFIG.images.length;
   stage.style.perspective=CONFIG.perspective+'px';
   container.style.perspective=CONFIG.perspective+'px';
-  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-  const finePointer=matchMedia('(pointer: fine)');
-  let paused=reduced.matches;
-  try { paused=paused||sessionStorage.getItem('cj-lab-motion-paused')==='true'; }catch{}
-  let width=stage.clientWidth,height=stage.clientHeight,raf=0,last=0,phase=0,visible=false;
-  let targetX=0,targetY=0,pointerX=0,pointerY=0,velocity=0,scrollTime=0;
-  let previousScroll=window.scrollY;
-  const positionX=[-1,1,-1,1,-1,1];
-  const positionY=[-.22,.21,.25,-.25,-.12,.12];
-  const cards=CONFIG.images.map((image,index)=>{
-    const figure=document.createElement('figure');figure.className='depth-card';
-    const img=document.createElement('img');img.src=image.src;img.alt='';img.width=720;img.height=480;
-    img.loading=index<2?'eager':'lazy';img.decoding='async';
-    const caption=document.createElement('figcaption');caption.append(document.createTextNode(image.label));
-    const marker=document.createElement('span');marker.textContent='↗';caption.append(marker);
-    figure.append(img,caption);container.append(figure);return figure;
-  });
-  function draw(){
-    const mobile=width<420;
-    cards.forEach((card,index)=>{
-      const p=(.87-index/6+phase)%1;
-      const z=-920+p*1100;
-      const spread=width*(mobile?.265:.265);
-      const x=positionX[index]*(spread+Math.sin(p*Math.PI*2+index)*width*.035)+pointerX*CONFIG.parallax;
-      const y=positionY[index]*height+Math.cos(p*Math.PI*2+index)*height*.04+pointerY*CONFIG.parallax*.7;
-      const rotation=positionX[index]*(-7+Math.sin(p*Math.PI*2)*4);
-      const stretch=1+Math.min(velocity*.05,.09);
-      const fadeIn=Math.min(1,p/.13),fadeOut=Math.min(1,(1-p)/.12);
-      card.style.transform=`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,${z.toFixed(2)}px) rotateZ(${rotation.toFixed(2)}deg) scaleY(${stretch.toFixed(3)})`;
-      card.style.opacity=(Math.max(0,fadeIn*fadeOut)*(.48+p*.52)).toFixed(3);
-      card.style.zIndex=String(Math.floor(p*100));
-      card.style.filter=mobile?'none':`blur(${Math.min(1.3,velocity*.18+Math.max(0,.25-p)*1.8).toFixed(2)}px)`;
-    });
-    document.querySelector('#coordinate-x').textContent=pointerX.toFixed(2);
-    document.querySelector('#coordinate-y').textContent=pointerY.toFixed(2);
+  const mod=(a,n)=>(a%n+n)%n;
+  const paused=()=>userPaused||reduced.matches;
+  const pageVisible=()=>!document.hidden;
+  const galleryVisible=()=>stageVisible&&!$('#view-overview').hidden;
+  const galleryRunning=()=>galleryVisible()&&!focused&&!hovered&&!dragging&&!dialog.open;
+  const canAnimate=()=>!paused()&&pageVisible()&&!dialog.open;
+
+  function showPhoto(index) {
+    suppressClick=false;
+    const photo=CONFIG.images[index];
+    $('#photo-title').textContent=photo.label;
+    $('#photo-preview').src=photo.src;$('#photo-preview').alt=photo.alt;
+    dialog.showModal();synchronize();
   }
-  function canRun(){return !paused&&!document.hidden&&visible&&!document.querySelector('#view-overview').hidden;}
+  CONFIG.images.forEach((photo,index)=>{
+    const card=document.createElement('button');card.type='button';card.className='orbit-card';
+    card.setAttribute('aria-label','查看大图：'+photo.label);
+    const frame=document.createElement('span');frame.className='orbit-image-frame';
+    const img=document.createElement('img');img.src=photo.src;img.alt=photo.alt;img.width=photo.width;img.height=photo.height;img.draggable=false;img.decoding='async';img.loading=index===0?'eager':'lazy';frame.append(img);
+    const caption=document.createElement('span');caption.className='orbit-caption';
+    const number=document.createElement('span');number.textContent=String(index+1).padStart(2,'0');
+    const label=document.createElement('span');label.textContent=photo.label;
+    const icon=document.createElement('span');icon.textContent='⤢';icon.setAttribute('aria-hidden','true');
+    caption.append(number,label,icon);card.append(frame,caption);
+    card.addEventListener('click',()=>{if(suppressClick){suppressClick=false;return;}showPhoto(index);});
+    card.addEventListener('mouseenter',()=>{if(fine.matches){hovered=true;drawGallery();}});
+    card.addEventListener('mouseleave',()=>{hovered=false;});
+    container.append(card);cardNodes.push(card);
+    const dot=document.createElement('button');dot.type='button';dot.className='orbit-dot';dot.setAttribute('aria-label','转到照片：'+photo.label);dot.textContent=String(index+1).padStart(2,'0');dot.addEventListener('click',()=>select(index));$('#orbit-selection').append(dot);selectors.push(dot);
+  });
+  function updateControls(){selectors.forEach((dot,index)=>{const selected=index===active;dot.classList.toggle('selected',selected);dot.setAttribute('aria-pressed',String(selected));});}
+  function drawGallery(){
+    const radius=Math.min(width*.285,173),depthRadius=radius*.75;
+    let front=-Infinity;
+    cardNodes.forEach((card,index)=>{
+      const theta=angle+index*step,z=Math.cos(theta)*depthRadius;
+      const x=Math.sin(theta)*radius,y=-Math.cos(theta)*9;
+      card.style.transform=`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,${z.toFixed(2)}px) rotateY(${(-Math.sin(theta)*23).toFixed(2)}deg)`;
+      card.style.opacity=(.67+(Math.cos(theta)+1)*.165).toFixed(3);
+      card.style.zIndex=String(Math.round(z+200));
+      card.classList.toggle('front',Math.cos(theta)>.8);
+      if(z>front){front=z;active=index;}
+    });
+    stage.style.setProperty('--orbit-angle',(-angle*180/Math.PI).toFixed(2)+'deg');updateControls();
+  }
+  function select(index){
+    const delta=Math.atan2(Math.sin(-index*step-angle),Math.cos(-index*step-angle));
+    targetAngle=angle+delta;
+    if(paused()||!galleryVisible()){angle=targetAngle;targetAngle=null;drawGallery();}
+    else if(!raf)synchronize();
+  }
+  $('#orbit-prev').addEventListener('click',()=>select(mod(active-1,CONFIG.images.length)));
+  $('#orbit-next').addEventListener('click',()=>select(mod(active+1,CONFIG.images.length)));
+  stage.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();select(mod(active+(event.key==='ArrowRight'?1:-1),CONFIG.images.length));}});
+  container.addEventListener('focusin',()=>{focused=true;});
+  container.addEventListener('focusout',()=>{queueMicrotask(()=>{focused=container.contains(document.activeElement);});});
+  stage.addEventListener('pointerdown',event=>{if(event.button!==0)return;dragging=true;dragStart=event.clientX;dragAngle=angle;dragMoved=false;targetAngle=null;});
+  window.addEventListener('pointermove',event=>{
+    pointer.x=event.clientX;pointer.y=event.clientY;
+    if(!dragging)return;const dx=event.clientX-dragStart;
+    if(Math.abs(dx)>7){dragMoved=true;angle=dragAngle+dx/Math.max(width,200)*Math.PI*1.6;drawGallery();}
+  },{passive:true});
+  function finishDrag(){if(!dragging)return;dragging=false;if(dragMoved){suppressClick=true;setTimeout(()=>{suppressClick=false;},350);}dragMoved=false;}
+  window.addEventListener('pointerup',finishDrag);
+  window.addEventListener('pointercancel',finishDrag);
+  document.documentElement.addEventListener('pointerleave',()=>{pointer.x=pointer.y=-10000;hovered=false;finishDrag();});
+  $('#photo-close').addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
+  dialog.addEventListener('close',synchronize);
+
+  function resizeParticles(){
+    viewportWidth=innerWidth;viewportHeight=innerHeight;
+    const dpr=Math.min(devicePixelRatio||1,1.5);
+    canvas.width=Math.round(viewportWidth*dpr);canvas.height=Math.round(viewportHeight*dpr);
+    if(!ctx)return;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const count=viewportWidth<650?CONFIG.particles.mobile:CONFIG.particles.desktop;
+    particles=Array.from({length:count},()=>({x:Math.random()*viewportWidth,y:Math.random()*viewportHeight,vx:(Math.random()-.5)*14,vy:(Math.random()-.5)*12,r:Math.random()*1.4+.5,phase:Math.random()*Math.PI*2}));
+    drawParticles(0,0);
+  }
+  function drawParticles(dt,time){
+    if(!ctx)return;ctx.clearRect(0,0,viewportWidth,viewportHeight);
+    const link=viewportWidth<650?90:CONFIG.particles.linkDistance;
+    particles.forEach((p,index)=>{
+      if(dt){p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.x<0)p.x+=viewportWidth;if(p.x>viewportWidth)p.x-=viewportWidth;if(p.y<0)p.y+=viewportHeight;if(p.y>viewportHeight)p.y-=viewportHeight;}
+      const alpha=.35+(Math.sin(time*.0006+p.phase)+1)*.2;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(184,241,133,${alpha})`;ctx.fill();
+      for(let j=index+1;j<particles.length;j++){
+        const q=particles[j],distance=Math.hypot(p.x-q.x,p.y-q.y);
+        if(distance<link){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.strokeStyle=`rgba(142,196,122,${(1-distance/link)*.17})`;ctx.lineWidth=.65;ctx.stroke();}
+      }
+      if(fine.matches&&Math.hypot(p.x-pointer.x,p.y-pointer.y)<CONFIG.particles.pointerDistance){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(pointer.x,pointer.y);ctx.strokeStyle='rgba(194,255,107,.23)';ctx.lineWidth=.6;ctx.stroke();}
+    });
+  }
   function frame(now){
-    raf=0;if(!canRun())return;
-    const delta=Math.min(.06,last?(now-last)/1000:1/60);last=now;
-    velocity*=Math.exp(-delta*4.5);
-    pointerX+=(targetX-pointerX)*Math.min(1,delta*5);
-    pointerY+=(targetY-pointerY)*Math.min(1,delta*5);
-    phase=(phase+delta/CONFIG.cycleSeconds*(1+velocity*CONFIG.scrollBoost))%1;
-    draw();raf=requestAnimationFrame(frame);
+    raf=0;if(!canAnimate())return;const dt=Math.min(.05,last?(now-last)/1000:1/60);last=now;
+    if(galleryVisible()){
+      if(targetAngle!==null&&!dragging){angle+=(targetAngle-angle)*Math.min(1,dt*9);if(Math.abs(targetAngle-angle)<.002){angle=targetAngle;targetAngle=null;}drawGallery();}
+      else if(galleryRunning()){angle-=dt*Math.PI*2/CONFIG.cycleSeconds;if(Math.abs(angle)>Math.PI*20)angle=mod(angle,Math.PI*2);drawGallery();}
+    }
+    drawParticles(dt,now);raf=requestAnimationFrame(frame);
   }
   function synchronize(){
     if(raf){cancelAnimationFrame(raf);raf=0;}last=0;
-    document.body.classList.toggle('motion-disabled',paused);
-    button.setAttribute('aria-pressed',String(paused));
-    button.setAttribute('aria-label',paused?'播放画廊动效':'暂停画廊动效');
-    button.textContent=paused?'▶ 播放动效':'Ⅱ 暂停动效';
-    document.querySelector('#motion-label').textContent=paused?'DEPTH FIELD / STILL':'DEPTH FIELD / ACTIVE';
-    if(canRun())raf=requestAnimationFrame(frame);else draw();
+    const stopped=paused();document.body.classList.toggle('motion-disabled',stopped);
+    toggle.disabled=reduced.matches;toggle.title=reduced.matches?'系统已开启减少动态效果，可通过左右按钮手动切图。':'';
+    toggle.setAttribute('aria-pressed',String(stopped));toggle.setAttribute('aria-label',stopped?'播放页面动效':'暂停页面动效');toggle.textContent=stopped?'▶ 播放动效':'Ⅱ 暂停动效';
+    $('#motion-label').textContent=stopped?'ORBIT / STILL':'ORBIT / AUTO ROTATE';
+    drawGallery();drawParticles(0,performance.now());if(canAnimate())raf=requestAnimationFrame(frame);
   }
-  button.addEventListener('click',()=>{paused=!paused;try{sessionStorage.setItem('cj-lab-motion-paused',String(paused));}catch{}synchronize();});
-  reduced.addEventListener('change',()=>{paused=reduced.matches;velocity=0;synchronize();});
-  stage.addEventListener('pointermove',event=>{if(paused||!finePointer.matches)return;const bounds=stage.getBoundingClientRect();targetX=(event.clientX-bounds.left)/bounds.width*2-1;targetY=(event.clientY-bounds.top)/bounds.height*2-1;});
-  stage.addEventListener('pointerleave',()=>{targetX=targetY=0;});
-  window.addEventListener('scroll',()=>{const now=performance.now();const delta=Math.abs(window.scrollY-previousScroll);const elapsed=Math.max(16,now-scrollTime);previousScroll=window.scrollY;scrollTime=now;if(canRun())velocity=Math.min(2,velocity+delta/elapsed*.28);},{passive:true});
-  document.addEventListener('visibilitychange',synchronize);
-  window.addEventListener('hashchange',()=>{velocity=0;previousScroll=0;requestAnimationFrame(synchronize);});
-  const resize=new ResizeObserver(()=>{width=stage.clientWidth;height=stage.clientHeight;if(!canRun())draw();});resize.observe(stage);
-  const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;synchronize();},{threshold:.05});observer.observe(stage);
-  draw();synchronize();
+  toggle.addEventListener('click',()=>{if(reduced.matches){toggle.textContent='系统已开启减少动态效果';return;}userPaused=!userPaused;try{sessionStorage.setItem('cj-lab-motion-paused',String(userPaused));}catch{}synchronize();});
+  reduced.addEventListener('change',synchronize);document.addEventListener('visibilitychange',synchronize);window.addEventListener('hashchange',()=>requestAnimationFrame(synchronize));
+  const resize=new ResizeObserver(()=>{width=stage.clientWidth;drawGallery();});resize.observe(stage);
+  window.addEventListener('resize',resizeParticles,{passive:true});
+  const visibility=new IntersectionObserver(entries=>{stageVisible=entries[0].isIntersecting;},{threshold:.05});visibility.observe(stage);
+  resizeParticles();synchronize();
 })();

@@ -8,6 +8,7 @@
 <script src="./data.js" defer></script><script src="./app.js" defer></script><script src="./fx.js" defer></script>
 </head>
 <body>
+<canvas id="particle-background" aria-hidden="true"></canvas>
 <div class="ambient" aria-hidden="true"><div class="ambient-grid"></div><div class="ambient-orb"></div></div>
 <a class="skip" href="#main">跳到内容</a>
 <header class="header"><a class="brand" href="#overview"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M10 8H6v16h4M22 8h4v16h-4M13 21l6-10" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span>CJ LAB<small>EMBEDDED SYSTEMS JOURNAL</small></span></a><nav aria-label="主导航"><a href="#overview">总览</a><a href="#projects">项目档案</a><a href="#logs">开发日志</a><a href="#templates">记录模板</a><a href="#about">关于</a></nav><div class="social-links" role="group" aria-label="社交平台"><a class="github-link" href="https://github.com/cj6666285" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a class="github-link" href="https://v.douyin.com/aUGkqMEhm6Y/" target="_blank" rel="noopener noreferrer" aria-label="抖音链接一，在新标签页打开">抖音① ↗</a><a class="github-link" href="https://v.douyin.com/NrMRS0yqG3I/" target="_blank" rel="noopener noreferrer" aria-label="抖音链接二，在新标签页打开">抖音② ↗</a></div></header>
@@ -22,14 +23,16 @@
       <div class="actions"><a class="button primary" href="#projects">进入项目档案 <span>↗</span></a><a class="button secondary" href="#templates">开始记录 <span>＋</span></a></div>
       <div class="hero-caption"><span><i></i> INDEPENDENT EXPLORER</span><span>SOFTWARE × HARDWARE</span></div>
     </div>
-    <div class="gallery-module">
-      <div class="gallery-bar"><span><i></i> LIVE WORKBENCH</span><span class="gallery-coordinate">X <b id="coordinate-x">0.00</b> / Y <b id="coordinate-y">0.00</b></span></div>
-      <div class="tunnel" id="tunnel" role="img" aria-label="芯片、电路、信号波形与代码组成的三维技术图形画廊">
-        <div class="tunnel-grid" aria-hidden="true"></div><div class="tunnel-ring ring-one" aria-hidden="true"></div><div class="tunnel-ring ring-two" aria-hidden="true"></div><div class="tunnel-core" aria-hidden="true"><span>ENGINEERING</span><b>THE<br>UNKNOWN.</b><i>EXPLORE / BUILD / REPEAT</i></div>
-        <div class="tunnel-cards" id="tunnel-cards" aria-hidden="true"></div>
-        <div class="crosshair crosshair-tl" aria-hidden="true">＋</div><div class="crosshair crosshair-br" aria-hidden="true">＋</div><span class="tunnel-side" aria-hidden="true">CJ LAB — EXPERIMENTAL ARCHIVE</span>
+    <div class="gallery-module orbit-module">
+      <div class="gallery-bar"><span><i></i> MEMORY ORBIT</span><span class="gallery-coordinate">3 IMAGES / 360° VIEW</span></div>
+      <div class="orbit-stage" id="orbit-stage" role="region" aria-label="自动旋转的三维照片环形轮播" aria-roledescription="轮播">
+        <div class="orbit-halo" aria-hidden="true"></div><div class="orbit-floor" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="orbit-cross cross-left" aria-hidden="true">＋</div><div class="orbit-cross cross-right" aria-hidden="true">＋</div>
+        <div class="orbit-cards" id="orbit-cards"></div>
+        <span class="orbit-stage-label" aria-hidden="true">PERSONAL GALLERY / CJ LAB</span>
       </div>
-      <div class="gallery-bottom"><span><i class="live-led"></i><span id="motion-label">DEPTH FIELD / ACTIVE</span></span><button id="motion-toggle" class="motion-toggle" aria-pressed="false" aria-label="暂停画廊动效">Ⅱ 暂停动效</button></div>
+      <div class="orbit-controls"><button id="orbit-prev" class="orbit-arrow" aria-label="上一张照片">←</button><div class="orbit-selection" id="orbit-selection" role="group" aria-label="选择照片"></div><button id="orbit-next" class="orbit-arrow" aria-label="下一张照片">→</button></div>
+      <div class="gallery-bottom"><span><i class="live-led"></i><span id="motion-label">ORBIT / AUTO ROTATE</span></span><button id="motion-toggle" class="motion-toggle" aria-pressed="false" aria-label="暂停页面动效">Ⅱ 暂停动效</button></div>
     </div>
   </div>
   <div class="tech-strip" aria-label="关注的技术领域"><span>STM32</span><i>+</i><span>FIRMWARE</span><i>+</i><span>PCB DESIGN</span><i>+</i><span>RTOS</span><i>+</i><span>SIGNAL & SYSTEMS</span><i>+</i><span>DEBUGGING</span><span class="strip-tail">SCROLL TO EXPLORE ↓</span></div>
@@ -43,4 +46,4 @@
 <section id="view-templates" class="view" hidden aria-labelledby="templates-title"><div class="eyebrow">A STRUCTURE FOR YOUR NEXT BUILD</div><div class="page-head"><div><h1 id="templates-title">记录模板<span class="title-dot">.</span></h1><p>把项目拆成清晰的章节，之后慢慢填满。</p></div></div><div id="template-tabs" class="filters" role="group" aria-label="记录模板"><button data-template="software">软件项目</button><button data-template="hardware">硬件项目</button><button data-template="debug">调试记录</button></div><div class="template-layout"><aside class="template-aside"><span class="eyebrow">DOCUMENT OUTLINE</span><h2 id="template-name"></h2><p id="template-description"></p><button class="button primary" id="copy-template">复制 Markdown 模板</button><button class="button secondary" id="download-template">下载模板 ↓</button><span class="template-note">适合放进项目 README、个人笔记或 GitHub 仓库。</span></aside><div id="template-sections" class="template-sections"></div></div></section>
 <section id="view-about" class="view" hidden aria-labelledby="about-title"><div class="eyebrow">ABOUT THE WORKBENCH</div><div class="about-grid"><div><h1 id="about-title">你好，我是 CJ。<br><span>这是我的数字工作台。</span></h1><p>用这个空间记录嵌入式软件与硬件的学习和项目实践。从一个驱动、一种接口、一块电路板开始，慢慢积累属于自己的工程经验。</p><p>这里会逐步放进项目介绍、设计选择、开发记录、测试结果和复盘。每一条记录，都是下一次出发的起点。</p><a class="button primary" href="https://github.com/cj6666285" target="_blank" rel="noopener noreferrer">在 GitHub 找到我 ↗</a></div><div class="about-card"><span class="eyebrow">ON THIS WORKBENCH</span><div><b>01</b><span>软件 / Firmware<small>C、驱动、协议、系统与工具</small></span></div><div><b>02</b><span>硬件 / Hardware<small>电路、PCB、接口与测量</small></span></div><div><b>03</b><span>记录 / Documentation<small>实验、验证、调试与复盘</small></span></div></div></div></section>
 <footer><span>CJ LAB <i>/</i> EMBEDDED SYSTEMS JOURNAL</span><span>从动手开始，向理解靠近。<i>·</i><a href="https://github.com/cj6666285" target="_blank" rel="noopener noreferrer">@cj6666285 ↗</a></span></footer>
-</main><div id="toast" class="toast" role="status" hidden></div></body></html>
+</main><dialog id="photo-dialog" class="photo-dialog" aria-labelledby="photo-title"><div class="photo-dialog-bar"><h2 id="photo-title">照片预览</h2><button id="photo-close" class="photo-close" aria-label="关闭照片预览">×</button></div><img id="photo-preview" src="./assets/images/gallery-01.webp" alt=""><p>按 Esc 或点击关闭按钮返回</p></dialog><div id="toast" class="toast" role="status" hidden></div></body></html>
