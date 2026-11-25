@@ -8,7 +8,7 @@ HTML、CSS 和原生 JavaScript，GitHub Pages 免费托管，无需构建。
 
 - 总览：个人介绍、3D 照片环形轮播、粒子背景、项目统计。
 - 项目档案：嵌入式与电源专题、封面文章卡片、分类搜索、正文和多级目录。
-- 关于：个人介绍及 GitHub 主页。
+- 关于：个人介绍，以及两个抖音、GitHub、QQ、微信的图标卡片。
 
 已移除独立的记录模板页面、开发日志栏目和首页三张模板入口卡片。不提供留言板，不需要配置数据库。
 
@@ -61,7 +61,7 @@ children 支持多级章节，目录自动生成，章节链接支持刷新定�
 
 ## 照片轮播与粒子背景
 
-保留三张照片自动旋转的 3D 圆环，以及 Canvas 粒子连线背景，无需 CDN。
+六张照片自动旋转的 3D 圆环，以及 Canvas 粒子连线背景，无需 CDN。
 
 - 默认每圈 24 秒，悬停或键盘聚焦照片时暂时停止。
 - 左右箭头、编号、方向键或横向拖动切换照片。
@@ -72,7 +72,13 @@ children 支持多级章节，目录自动生成，章节链接支持刷新定�
 
 ### 更换照片和调整动效
 
-将图片放进 assets/images/，修改 fx.js 顶部 CONFIG.images 的 src、label、alt、width 和 height。当前为 gallery-01.webp、gallery-02.webp、gallery-03.webp。照片保持完整比例，建议长边不超过 1600 像素并使用 WebP。
+将图片放进 assets/images/，修改 fx.js 顶部 CONFIG.images 的 src、label、alt、width 和 height。当前为 gallery-01.webp 至 gallery-06.webp。照片保持完整比例，建议长边不超过 1600 像素并使用 WebP。编号按钮会根据照片数量自动生成。
+
+### 社交卡片与联系方式
+
+关于页采用两张抖音大卡片和 GitHub、QQ、微信三张小卡片，图标为内嵌 SVG。平台链接在 index.html 中修改，页眉也有相同入口。QQ 和微信通过原生弹窗展示二维码，支持保存；QQ 另提供复制号码和打开 QQ 的入口，直接打开需要设备已安装 QQ。
+
+二维码图片位于 assets/images/qq-qr.png、wechat-qr.png，已保留二维码四周留白。号码与弹窗说明在 app.js 的 contacts 中维护；更换 QQ 号码时还需同步复制按钮和 index.html 中的打开 QQ 链接。
 
 CONFIG.cycleSeconds 控制旋转速度；CONFIG.particles.desktop / mobile 控制粒子数量，linkDistance / pointerDistance 控制连线与鼠标响应距离。
 

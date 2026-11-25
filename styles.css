@@ -38,3 +38,47 @@
 /* Three project statistics after simplifying the homepage. */
 .metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:600px){.metrics{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* Social cards and contact QR dialog. */
+.social-links .github-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#ffffff02}
+.social-links .github-link svg{width:15px;height:15px;flex-shrink:0}
+.connect-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin:25px 0 38px}
+.connect-intro h1{font-size:clamp(28px,3vw,42px);font-weight:600;letter-spacing:.5px;line-height:1.6}
+.connect-intro p{font-size:13px;line-height:2.1;color:#92a48f;margin-top:15px}
+.connect-intro-note{font:8px/1.8 var(--mono);letter-spacing:1.7px;color:#7d9a6c;white-space:nowrap;padding-bottom:8px}
+.connect-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:22px;padding-bottom:25px}
+.connect-card{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;grid-column:span 2;min-width:0;min-height:300px;padding:30px;text-align:left;color:var(--ink);background:linear-gradient(145deg,#101a17,#0b1313);border:1px solid #314238;border-radius:22px;transition:border-color .25s,transform .25s,box-shadow .25s}
+.connect-card-wide{grid-column:span 3;min-height:308px}
+.connect-card:after{content:"";position:absolute;width:290px;height:290px;right:-150px;bottom:-180px;border:1px solid #709a6150;border-radius:50%;box-shadow:0 0 0 35px #74b55904,0 0 0 70px #74b55903;z-index:-1;pointer-events:none;transition:transform .4s}
+.connect-card:hover{border-color:#90b56b;transform:translateY(-4px);box-shadow:0 14px 35px #0004}
+.connect-card:hover:after{transform:translate(-14px,-10px)}
+.connect-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:28px}
+.platform-icon{display:grid;place-items:center;width:58px;height:58px;flex-shrink:0;border:1px solid #53644966;border-radius:17px;background:#101514;box-shadow:0 8px 22px #0003;color:#fff}
+.platform-icon svg{width:36px;height:36px}
+.platform-douyin{background:#050909}
+.platform-github{background:#1b2422;color:#ecf8e7}
+.platform-qq{background:#e6f2ed}
+.platform-wechat{background:#178a52;border-color:#75f3a733}
+.connect-kicker{font:8px/1.7 var(--mono);letter-spacing:1.5px;color:#839e8e;text-align:right;padding-top:3px}
+.connect-card h2{font-size:25px;font-weight:600;line-height:1.5;letter-spacing:.5px;margin-bottom:13px}
+.connect-card p{font-size:12px;color:#8eaaa0;line-height:2;max-width:440px;margin:0 0 26px;overflow-wrap:anywhere}
+.connect-action{display:flex;align-items:center;gap:13px;margin-top:auto;font-size:11px;letter-spacing:1.2px;color:#b0c9a1}
+.connect-action>span{font:16px var(--mono);color:#8eb66b}
+.connect-card[data-contact="wechat"]{background:radial-gradient(ellipse at bottom right,#184a372b,transparent 65%),#0d1715}
+.connect-card[data-contact="wechat"] .connect-action{color:#8fdec3}
+.contact-dialog{width:min(440px,calc(100% - 28px));max-height:94dvh;overflow:auto;padding:24px;background:#0e1814;color:var(--ink);border:1px solid #719556;border-radius:18px;box-shadow:0 20px 100px #000a}
+.contact-dialog::backdrop{background:#030806d9;backdrop-filter:blur(8px)}
+.contact-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px}
+.contact-dialog h2{font-size:23px;font-weight:550;margin-bottom:8px}
+.contact-dialog>p{font-size:11px;line-height:1.9;color:#9ab08d;overflow-wrap:anywhere}
+.contact-qr-frame{margin:18px auto;background:white;border-radius:10px;overflow:hidden;max-width:310px}
+.contact-qr-frame img{display:block;width:100%;height:auto}
+.contact-dialog-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:20px}
+.contact-dialog .contact-hint{font-size:10px;text-align:center;margin-top:14px}
+body:has(dialog[open]){overflow:hidden}
+.orbit-controls{gap:12px}.orbit-selection{gap:5px}
+@media(max-width:1150px){.header{gap:20px}.header nav a{padding-left:9px;padding-right:9px}.social-links .github-link{font-size:8px;padding:7px}.social-links .github-link svg{width:13px;height:13px}.connect-card{padding:25px}.connect-kicker{font-size:7px;letter-spacing:1px}}
+@media(max-width:850px){.connect-intro-note{display:none}.connect-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.connect-card,.connect-card-wide{grid-column:span 1;min-height:290px}.connect-card:last-child{grid-column:1/-1}.connect-card h2{font-size:23px}.connect-card p{font-size:12px}}
+@media(max-width:600px){.social-links{justify-content:flex-start;flex-wrap:wrap}.social-links .github-link{font-size:9px;gap:5px;padding:7px 8px}.social-links .github-link svg{width:14px;height:14px}.connect-intro{margin:20px 0 28px}.connect-intro h1{font-size:27px}.connect-intro p{font-size:11px;margin-top:13px}.connect-grid{grid-template-columns:1fr;gap:17px;padding-bottom:10px}.connect-card,.connect-card-wide,.connect-card:last-child{grid-column:1;min-height:277px;padding:25px;border-radius:19px}.connect-card-top{margin-bottom:23px}.connect-card h2{font-size:24px}.connect-card p{font-size:12px;margin-bottom:26px}.platform-icon{width:54px;height:54px;border-radius:15px}.platform-icon svg{width:34px;height:34px}.connect-kicker{font-size:8px}.contact-dialog{padding:20px}.contact-dialog h2{font-size:21px}.contact-qr-frame{max-width:min(290px,42dvh)}.contact-dialog .button{padding:10px 14px}.orbit-controls{gap:7px;padding-left:6px;padding-right:6px}.orbit-selection{gap:3px}.orbit-arrow{width:29px}.orbit-dot{width:27px;font-size:8px}}
+@media(max-width:360px){.social-links{gap:5px}.social-links .github-link{font-size:8px;gap:4px;padding:6px}.social-links .github-link svg{width:12px;height:12px}.connect-intro h1{font-size:24px}.connect-card{padding:23px}.orbit-controls{gap:5px}.orbit-selection{gap:2px}.orbit-dot{width:25px}.orbit-arrow{width:28px}}
+@media(prefers-reduced-motion:reduce){.connect-card:hover{transform:none}.connect-card:hover:after{transform:none}}

@@ -8,7 +8,10 @@
     images: [
       { src:'./assets/images/gallery-01.webp', label:'雪日 · 眼镜', alt:'戴着黑框眼镜、站在雪景前的企鹅角色插画', width:1184, height:1200 },
       { src:'./assets/images/gallery-02.webp', label:'夏日 · 小确幸', alt:'拿着汽水和巧克力冰淇淋的企鹅角色插画', width:1056, height:1200 },
-      { src:'./assets/images/gallery-03.webp', label:'元气 · 瞬间', alt:'粉色短发卡通角色的元气表情插画', width:1200, height:675 }
+      { src:'./assets/images/gallery-03.webp', label:'元气 · 瞬间', alt:'粉色短发卡通角色的元气表情插画', width:1200, height:675 },
+      { src:'./assets/images/gallery-04.webp', label:'午后 · 轻松', alt:'企鹅装扮的短发角色抬手轻触头发的插画', width:1035, height:1400 },
+      { src:'./assets/images/gallery-05.webp', label:'防吃 · 日常', alt:'企鹅装扮的短发角色闭眼抬手，旁边写着防吃的插画', width:1224, height:1086 },
+      { src:'./assets/images/gallery-06.webp', label:'雪地 · 心意', alt:'雪地里的企鹅装扮角色展示礼盒的插画', width:1051, height:1400 }
     ]
   };
   const $ = s => document.querySelector(s);

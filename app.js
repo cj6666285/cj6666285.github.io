@@ -106,5 +106,36 @@
     if(anchor)requestAnimationFrame(()=>anchor.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'}));else window.scrollTo(0,0);
     updateProgress();
   }
-  window.addEventListener('hashchange',navigate);renderProjects();navigate();
+  const contactDialog=$('#contact-dialog');
+  const contacts={
+    qq:{title:'添加 QQ 好友',instructions:'QQ：824869715 · 使用 QQ 扫一扫添加好友。',image:'./assets/images/qq-qr.png',alt:'QQ 824869715 的好友二维码'},
+    wechat:{title:'添加微信好友',instructions:'使用微信扫一扫，添加我为好友。',image:'./assets/images/wechat-qr.png',alt:'微信好友二维码'}
+  };
+  let contactToastTimer;
+  function contactStatus(message){
+    $('#toast').textContent=message;$('#toast').hidden=false;
+    clearTimeout(contactToastTimer);contactToastTimer=setTimeout(()=>$('#toast').hidden=true,4000);
+  }
+  $$('[data-contact]').forEach(button=>button.addEventListener('click',()=>{
+    const key=button.dataset.contact,contact=contacts[key];if(!contact)return;
+    $('#contact-title').textContent=contact.title;
+    $('#contact-instructions').textContent=contact.instructions;
+    $('#contact-image-error').hidden=true;
+    $('#contact-qr').src=contact.image;$('#contact-qr').alt=contact.alt;
+    $('#copy-qq').hidden=key!=='qq';$('#open-qq').hidden=key!=='qq';
+    $('#save-contact-qr').href=contact.image;$('#save-contact-qr').download=key+'-qr.png';
+    if(!contactDialog.open)contactDialog.showModal();
+  }));
+  $('#contact-qr').addEventListener('error',()=>$('#contact-image-error').hidden=false);
+  $('#contact-close').addEventListener('click',()=>contactDialog.close());
+  contactDialog.addEventListener('click',event=>{
+    if(event.target!==contactDialog)return;
+    const rect=contactDialog.getBoundingClientRect();
+    if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)contactDialog.close();
+  });
+  $('#copy-qq').addEventListener('click',async()=>{
+    try{await navigator.clipboard.writeText('824869715');contactStatus('QQ 号已复制：824869715');}
+    catch{contactStatus('请长按或选中上方 QQ 号复制：824869715');}
+  });
+  window.addEventListener('hashchange',()=>{if(contactDialog.open)contactDialog.close();navigate();});renderProjects();navigate();
 })();
