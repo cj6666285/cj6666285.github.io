@@ -2,7 +2,7 @@
 
 网站：https://cj6666285.github.io/
 
-HTML、CSS 和原生 JavaScript，GitHub Pages 免费托管，无需构建。
+HTML、CSS 和原生 JavaScript，GitHub Pages 免费托管，无需构建。Markdown 解析器随站点保存，不依赖外部 CDN。
 
 ## 页面结构
 
@@ -18,7 +18,9 @@ HTML、CSS 和原生 JavaScript，GitHub Pages 免费托管，无需构建。
 
 | 文件 | 内容 |
 | --- | --- |
-| data.js | 真实项目、专题封面、文章框架预览 |
+| projects/ | Markdown 文章和每个项目自己的图片文件夹 |
+| projects/index.json | 要展示的文章路径清单，添加一篇登记一行 |
+| data.js | 专题名称、封面和外观配置 |
 | index.html | 首页文案、个人介绍、GitHub 和两个抖音链接 |
 | fx.js | 轮播照片与动效参数 |
 | assets/images/ | 照片、封面和正文配图 |
@@ -27,37 +29,102 @@ HTML、CSS 和原生 JavaScript，GitHub Pages 免费托管，无需构建。
 
 修改仓库 main 分支根目录下的文件并提交后，GitHub Pages 会自动重新部署。等待 Actions 中的 Pages 部署成功再刷新网站。
 
-## 添加项目文章
+## 添加项目：一篇 Markdown ＋ 一个照片文件夹
 
-编辑 data.js，将真实文章对象放入 projects 数组。也可以从 projectTemplates 复制结构后修改。最近的文章放在数组前面。
+文章已改为 Markdown。日常发布不需要编辑 app.js 或往 data.js 写文章对象。
 
-```javascript
-{
-  id: 'my-project', // 唯一 ID，英文与连字符
-  title: '你的项目名称',
-  category: '嵌入式', // 嵌入式或电源，也可配置自己的专题
-  discipline: '软硬件', // 软件、硬件或软硬件，用于首页统计
-  date: '2026-11-25',
-  status: '进行中',
-  cover: './assets/images/my-project.webp',
-  tags: ['STM32', 'C', 'PCB'],
-  summary: '项目目标、方案与当前进度。',
-  repository: 'https://github.com/你的账号/项目仓库', // 可选
-  sections: [
-    {title: '一、项目概述', text: '填写真实需求。', items: ['目标一', '目标二']},
-    {
-      title: '二、硬件方案',
-      image: './assets/images/my-schematic.webp', imageAlt: '项目原理图', caption: '版本说明。',
-      children: [{title: '2.1 主控与供电', text: '填写选型依据。'}]
-    },
-    {title: '三、软件实现', code: '// 关键代码'},
-    {title: '四、测试结果', table: {columns: ['测试项', '条件', '实测'], rows: [['输出电压', '填写条件', '填写结果']]}},
-    {title: '五、复盘与资料', text: '填写结论与下一步。', links: [{label: '查看资料 ↗', url: 'https://github.com/你的账号/项目仓库'}]}
-  ]
-}
+```text
+projects/
+├─ index.json
+├─ _template/          # 可复制的完整示例，默认草稿、不展示
+│  ├─ index.md
+│  └─ images/
+│     ├─ board.svg
+│     └─ test.svg
+└─ stm32-car/          # 你新建的项目，文件夹名不要与其他项目重复
+   ├─ index.md
+   └─ images/
+      ├─ board.jpg
+      └─ test.jpg
 ```
 
-children 支持多级章节，目录自动生成，章节链接支持刷新定位。正文、标签、表格和代码均按纯文本显示。图片支持相对路径或 HTTPS，素材需随文章一起提交。不要将提示文字或示意图当成已完成项目。
+### 第一步：复制示例，写文章、放照片
+
+将 projects/_template 复制为 projects/stm32-car。编辑 index.md 开头的信息：
+
+```yaml
+---
+title: "STM32 智能小车"
+category: "嵌入式"
+date: "2026-11-26"
+status: "进行中"
+discipline: "软硬件"
+tags: ["STM32", "电机控制"]
+summary: "介绍自己的设计目标、实现方案与当前进度。"
+cover: "./images/board.jpg"
+draft: false
+preview: false
+---
+```
+
+再在下面写正文：
+
+```markdown
+## 一、项目介绍
+
+这里写项目背景、目标和功能。
+
+## 二、硬件设计
+
+![主控板实拍](./images/board.jpg)
+
+*第一版主控板。*
+
+### 2.1 器件选型
+
+这里写选型依据。
+
+## 三、运行测试
+
+![测试照片](./images/test.jpg)
+```
+
+照片可以插入多张，JPG、PNG、WebP 均可。图片路径以当前 index.md 所在文件夹为起点；请勿写电脑盘符。文件名与大小写要一致，推荐英文文件名，不使用空格。带空格的路径可写成 `![照片](<./images/my photo.jpg>)`。图片支持点击打开原图。
+
+### 第二步：登记文章路径
+
+编辑 projects/index.json，将新文章加到数组最前面。例如：
+
+```json
+[
+  "stm32-car/index.md",
+  "preview-firmware/index.md",
+  "preview-buck/index.md",
+  "preview-adc/index.md",
+  "preview-pcb/index.md",
+  "preview-dcdc/index.md",
+  "preview-control/index.md"
+]
+```
+
+保留你需要的原有路径，每行之间有逗号，最后一行不加逗号。清单路径相对于 projects/，不需要再次写 projects/。网站无法直接枚举 GitHub Pages 的文件夹，因此新文章需要在这里登记一次；之后只修改文章与照片即可。
+
+### 第三步：上传到 GitHub
+
+在仓库 https://github.com/cj6666285/cj6666285.github.io 中选择 Add file → Upload files，将新项目文件夹上传到 projects/，并提交更新后的 projects/index.json。等待 Pages 部署成功，刷新网站。
+
+更新已有项目时，直接编辑对应 index.md，替换或增加 images/ 里的图片，无需重复登记。删除文章时先从 index.json 移除路径。清单顺序就是列表顺序，较新的项目放前面。
+
+### 配置与 Markdown 支持
+
+- title、category 必填；category 默认可选“嵌入式”“电源”，新分类也会自动加入筛选。
+- draft: true 为草稿，网站不展示；发布前改成 false。
+- preview: true 为框架示例，不计入真实项目数量；自己的文章用 false。存在真实文章时，列表自动显示真实文章，保留原有示例直达链接。
+- cover 是列表封面，路径相对当前文章。repository 和 designUrl 可选，填写 HTTPS 链接后显示源码、设计文件按钮。
+- 开头配置支持上述单行字段格式，字符串建议用双引号，tags 使用双引号数组。日期使用 YYYY-MM-DD；不支持复杂 YAML 嵌套写法。
+- 正文支持标题、多级章节、段落、粗体、斜体、列表、引用、分隔线、代码块、表格、链接、多张图片。正文标题自动生成右侧目录，刷新章节链接仍可定位。正文通常从二级标题 `##` 开始。
+- 使用标准 Markdown，手写 HTML 会被过滤。不支持 Mermaid、数学公式和视频嵌入。
+- 文章或清单读取失败时，项目页会显示错误和重试按钮；个别文章有误时其他文章仍能显示。
 
 ## 照片轮播与粒子背景
 
@@ -88,8 +155,8 @@ CONFIG.cycleSeconds 控制旋转速度；CONFIG.particles.desktop / mobile 控�
 
 ## 本地预览与发布
 
-在本目录运行 python -m http.server 4173 --bind 127.0.0.1，访问 http://127.0.0.1:4173/ ，或直接打开 index.html。
+在本目录运行 python -m http.server 4173 --bind 127.0.0.1，访问 http://127.0.0.1:4173/ 。Markdown 通过 HTTP 读取，不要双击 index.html 预览文章。
 
-当前从 main 分支根目录发布。更新时将本目录中的站点文件放在仓库根目录，保留 .nojekyll、fx.js 与 assets/。
+当前从 main 分支根目录发布。更新时将本目录中的站点文件放在仓库根目录，保留 .nojekyll、markdown.js、fx.js、assets/ 与 projects/。
 
 若切换为 GitHub Actions 发布，可使用 .github/workflows/deploy.yml，并在 Settings → Pages 中选择 GitHub Actions。两种发布方式任选一种。

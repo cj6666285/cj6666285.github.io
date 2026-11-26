@@ -112,3 +112,17 @@ body:has(dialog[open]){overflow:hidden}
 @media(max-width:950px){.hero h1.personal-title{font-size:65px;letter-spacing:3px}}
 @media(max-width:600px){.hero h1.personal-title{font-size:clamp(39px,11vw,62px);letter-spacing:2px;margin:22px 0}.interest-marquee{padding:27px 0 18px;margin:0 0 15px}.interest-heading{margin-bottom:22px}.interest-heading .eyebrow{font-size:6px;letter-spacing:.8px}.interest-heading h2{font-size:20px}.interest-note{font-size:8px;max-width:80px;text-align:right}.interest-tag{font-size:11px;padding:10px 16px;gap:12px;border-radius:7px}.tag-group{gap:11px;padding-right:11px}.tag-marquee+.tag-marquee{margin-top:12px}.orbit-image-status{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.tag-track{animation:none;will-change:auto}.tag-marquee{overflow-x:auto;mask-image:none}.tag-group[aria-hidden="true"]{display:none}}
+
+/* Markdown article content uses the same article layout and table of contents. */
+.project-load-status{padding:16px 19px;border:1px solid #607b4055;background:#b2d87308;border-radius:8px;margin:0 0 25px;color:#a2b58e;overflow-wrap:anywhere}
+.project-load-status p{font-size:12px;line-height:1.9}.project-load-status button{margin-top:12px}
+.article-body .markdown-image-link{display:block;border:1px solid #364a30;border-radius:10px;background:#101a13;overflow:hidden;margin:24px 0}
+.article-body .markdown-image-link img{display:block;width:100%;height:auto;max-height:800px;object-fit:contain}
+.markdown-image-error{display:block;padding:30px 20px;text-align:center;font-size:12px;color:#c6bc93}
+.article-body p:has(>.markdown-image-link){white-space:normal}
+.article-body a:not(.button):not(.markdown-image-link){color:#b8dc95;text-underline-offset:4px;text-decoration:underline;overflow-wrap:anywhere}
+.article-body code{font-family:var(--mono);font-size:.9em;overflow-wrap:anywhere}
+.article-body p>code,.article-body li>code{padding:2px 6px;border-radius:4px;background:#a8cf7220;color:#cee8b3}
+.article-body pre code{font-size:inherit;overflow-wrap:normal}.article-body ol{font-size:13px;line-height:2.3;color:#acc29f;padding-left:25px}
+.article-body blockquote:not(.article-summary){margin:20px 0;border-left:3px solid #a5c879;padding:13px 20px;background:#a8cf7209}
+.article-body hr{border:0;border-top:1px solid #35492c;margin:25px 0}.article-body strong{color:#d2e3c5}

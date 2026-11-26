@@ -4,8 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="曼波大王的嵌入式软件与硬件项目记录：项目档案、调试过程与技术复盘。">
 <meta name="theme-color" content="#080b0d"><title>曼波大王 · 嵌入式项目记录</title>
-<link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./styles.css?v=home-polish-1">
-<script src="./data.js" defer></script><script src="./app.js?v=home-polish-1" defer></script><script src="./fx.js?v=home-polish-1" defer></script>
+<link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./styles.css?v=markdown-1">
+<script src="./data.js" defer></script><script src="./assets/vendor/marked.umd.js" defer></script><script src="./markdown.js?v=markdown-1" defer></script><script src="./app.js?v=markdown-1" defer></script><script src="./fx.js?v=home-polish-1" defer></script>
 </head>
 <body>
 <canvas id="particle-background" aria-hidden="true"></canvas>
@@ -45,6 +45,7 @@
 <div class="eyebrow">PROJECT JOURNAL / DESIGN · BUILD · DOCUMENT</div>
 <div class="page-head"><div><h1 id="projects-title">项目与实践<span class="title-dot">.</span></h1><p>从电路到代码，用一篇篇记录串起完整的实践过程。</p></div></div>
 <div id="project-categories" class="category-grid" aria-label="项目专题"></div>
+<div id="project-load-status" class="project-load-status" role="status"><p id="project-load-message">正在读取 Markdown 文章…</p><button id="retry-projects" class="button secondary" type="button" hidden>重新读取</button></div>
 <div class="archive-heading"><div><span class="eyebrow">THE ARTICLE ARCHIVE</span><h2 id="archive-title">嵌入式专题</h2></div><span id="archive-count" class="archive-count" role="status"></span></div>
 <div class="toolbar"><div class="filters" id="filters" role="group" aria-label="项目分类"></div><label class="search"><span aria-hidden="true">⌕</span><input id="project-search" type="search" placeholder="搜索文章、芯片或技术…" aria-label="搜索项目"></label></div>
 <p id="preview-notice" class="preview-notice" hidden>以下为文章框架预览，展示项目的组织方式；实际内容可逐步填入。</p>
