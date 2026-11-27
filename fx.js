@@ -4,7 +4,7 @@
   const CONFIG = {
     cycleSeconds: 24,
     perspective: 900,
-    particles: { desktop: 40, mobile: 18, linkDistance: 120, pointerDistance: 145 },
+    particles: { desktop: 72, mobile: 30, linkDistance: 120, pointerDistance: 145 },
     images: [
       { src:'./assets/images/gallery-01.webp', label:'雪日 · 眼镜', alt:'戴着黑框眼镜、站在雪景前的企鹅角色插画', width:1184, height:1200 },
       { src:'./assets/images/gallery-02.webp', label:'夏日 · 小确幸', alt:'拿着汽水和巧克力冰淇淋的企鹅角色插画', width:1056, height:1200 },
@@ -132,12 +132,12 @@
     particles.forEach((p,index)=>{
       if(dt){p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.x<0)p.x+=viewportWidth;if(p.x>viewportWidth)p.x-=viewportWidth;if(p.y<0)p.y+=viewportHeight;if(p.y>viewportHeight)p.y-=viewportHeight;}
       const alpha=.35+(Math.sin(time*.0006+p.phase)+1)*.2;
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(177,197,217,${alpha})`;ctx.fill();
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(184,241,133,${alpha})`;ctx.fill();
       for(let j=index+1;j<particles.length;j++){
         const q=particles[j],distance=Math.hypot(p.x-q.x,p.y-q.y);
-        if(distance<link){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.strokeStyle=`rgba(177,197,217,${(1-distance/link)*.17})`;ctx.lineWidth=.65;ctx.stroke();}
+        if(distance<link){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.strokeStyle=`rgba(142,196,122,${(1-distance/link)*.17})`;ctx.lineWidth=.65;ctx.stroke();}
       }
-      if(fine.matches&&Math.hypot(p.x-pointer.x,p.y-pointer.y)<CONFIG.particles.pointerDistance){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(pointer.x,pointer.y);ctx.strokeStyle='rgba(196,210,225,.16)';ctx.lineWidth=.6;ctx.stroke();}
+      if(fine.matches&&Math.hypot(p.x-pointer.x,p.y-pointer.y)<CONFIG.particles.pointerDistance){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(pointer.x,pointer.y);ctx.strokeStyle='rgba(194,255,107,.23)';ctx.lineWidth=.6;ctx.stroke();}
     });
   }
   function frame(now){
@@ -153,7 +153,7 @@
     const stopped=paused();document.body.classList.toggle('motion-disabled',stopped);
     toggle.disabled=reduced.matches;toggle.title=reduced.matches?'系统已开启减少动态效果，可通过左右按钮手动切图。':'';
     toggle.setAttribute('aria-pressed',String(stopped));toggle.setAttribute('aria-label',stopped?'播放页面动效':'暂停页面动效');toggle.textContent=stopped?'▶ 播放动效':'Ⅱ 暂停动效';
-    $('#motion-label').textContent=stopped?'轮播已暂停':'自动轮播';
+    $('#motion-label').textContent=stopped?'ORBIT / STILL':'ORBIT / AUTO ROTATE';
     drawGallery();drawParticles(0,performance.now());if(canAnimate())raf=requestAnimationFrame(frame);
   }
   toggle.addEventListener('click',()=>{if(reduced.matches){toggle.textContent='系统已开启减少动态效果';return;}userPaused=!userPaused;try{sessionStorage.setItem('cj-lab-motion-paused',String(userPaused));}catch{}synchronize();});
