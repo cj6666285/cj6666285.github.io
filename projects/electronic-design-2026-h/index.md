@@ -4,24 +4,32 @@ category: "嵌入式"
 date: "2026-11-28"
 status: "功能与算法说明"
 discipline: "软硬件"
-tags: ["电赛", "双MCU", "TI M0", "MaixCam Pro", "YOLO26", "红外循迹", "视觉控制", "步进电机"]
-summary: "采用双 MCU（TI M0）＋ MaixCam Pro 视觉方案，记录红外循迹与双轮驱动、主控交互与滚珠横杆控制、钢珠视觉识别的分工，以及差速转向、速度 PI 闭环、位置滤波和视觉串口协议。"
-cover: "./images/system-overview.svg?v=dual-mcu-1"
+tags: ["电赛", "双MCU", "TI M0", "maxicam Pro", "YOLO26", "红外循迹", "视觉控制", "步进电机", "大疆图传"]
+summary: "采用双 MCU（TI M0）＋ maxicam Pro 视觉＋大疆图传方案，记录红外循迹与双轮驱动、主控交互与滚珠横杆控制、钢珠视觉识别的分工，以及差速转向、速度 PI 闭环、位置滤波、视觉串口协议和大疆图传的画面传输作用。"
+cover: "./images/ball-beam-platform.webp"
 draft: false
 preview: false
 ---
 
 ## 项目功能与算法说明
 
-本项目采用 **双 MCU（TI M0）＋ MaixCam Pro 视觉方案**。两颗 MCU 分别负责红外循迹与双轮驱动、主控交互与滚珠横杆控制；MaixCam Pro 负责钢珠视觉检测，并通过 UART 向主控 MCU 发送位置数据。
+本项目采用 **双 MCU（TI M0）＋ maxicam Pro 视觉＋大疆图传方案**。两颗 MCU 分别负责红外循迹与双轮驱动、主控交互与滚珠横杆控制；maxicam Pro 负责钢珠视觉检测，并通过 UART 向主控 MCU 发送位置数据。大疆图传负责运行画面的传输，便于现场观察系统状态。
 
-![双 MCU（TI M0）＋ MaixCam Pro 系统分工：循迹 MCU 负责红外循迹与双轮速度闭环，视觉端经 UART 向主控 MCU 提供钢珠像素位置，由主控 MCU 控制步进电机](./images/system-overview.svg?v=dual-mcu-1)
+![2026年湖南省大学生电子设计竞赛现场展板](./images/competition-venue.webp)
+
+*比赛现场：2026年湖南省大学生电子设计竞赛。*
+
+![双 MCU（TI M0）＋ maxicam Pro＋大疆图传系统分工：循迹 MCU 负责红外循迹与双轮速度闭环，视觉端经 UART 向主控 MCU 提供钢珠像素位置，由主控 MCU 控制步进电机，大疆图传负责画面传输](./images/system-overview.svg?v=photos-dji-1)
 
 ## 红外循迹与双轮驱动
 
 ### 职责与功能
 
 循迹 MCU 以红外传感器识别赛道位置，通过左右电机差速调整行驶方向。编码器提供左右轮速度反馈；系统支持循迹/速度控制模式、速度档位、指定点停车、蓝牙参数调节和状态显示。
+
+![项目硬件装配实物，展示控制板、接线与车体机构](./images/hardware-assembly.webp)
+
+*硬件装配：控制板、接线与车体机构实物。*
 
 ### 红外位置与循迹误差
 
@@ -79,7 +87,11 @@ output = limit(Kp × error + integral)
 
 ### 职责与功能
 
-主控 MCU 负责主控流程和滚珠横杆执行控制。它接收 MaixCam Pro 发送的视觉横坐标，计算钢珠相对目标位置的偏差，通过步进电机改变横杆角度。工程还提供任务启停、目标位置和控制参数设置、OLED 状态显示及蓝牙操作。
+主控 MCU 负责主控流程和滚珠横杆执行控制。它接收 maxicam Pro 发送的视觉横坐标，计算钢珠相对目标位置的偏差，通过步进电机改变横杆角度。工程还提供任务启停、目标位置和控制参数设置、OLED 状态显示及蓝牙操作。
+
+![滚珠横杆平台正面实物，展示横杆、刻度尺和车体布局](./images/ball-beam-platform.webp)
+
+*滚珠横杆平台：横杆、刻度尺与整车布局。*
 
 ### 视觉串口数据检查
 
@@ -125,7 +137,7 @@ target_steps = round(target_angle × 8.8889)
 
 ### 职责与功能
 
-视觉端在 MaixCam Pro 上运行 YOLO26 检测钢珠，提取图像坐标并通过 UART 向主控 MCU 发送结果。它还提供画面显示、标定辅助、镜头校正开关及 RTSP、JPEG、WebRTC 视频输出选项。
+视觉端在 maxicam Pro 上运行 YOLO26 检测钢珠，提取图像坐标并通过 UART 向主控 MCU 发送结果。它还提供画面显示、标定辅助、镜头校正开关及 RTSP、JPEG、WebRTC 视频输出选项。
 
 ### 目标筛选与检测中心
 
@@ -176,8 +188,14 @@ AA 55 04 valid x_high x_low confidence xor
 
 其中 `x` 是滤波后的横坐标像素值，`confidence` 为检测置信度乘以 100 后的整数，`xor` 是四字节 payload 的异或校验。检测有效时发送坐标与置信度；未检测到钢珠时发送无效标志和清零数据，明确告知主控当前没有有效测量。
 
+## 大疆图传
+
+大疆设备在本方案中承担图传作用，传输运行画面，便于现场观察和调试。钢珠检测与像素位置计算由 maxicam Pro 完成，检测结果通过 UART 发送给主控 MCU；主控 MCU 据此执行滚珠横杆控制。
+
 ## 系统分工
 
 - **循迹 MCU（TI M0）**：红外循迹、差速转向和左右轮速度闭环。
-- **视觉端（MaixCam Pro）**：钢珠视觉检测、像素位置滤波及串口数据发送。
+- **视觉端（maxicam Pro）**：钢珠视觉检测、像素位置滤波及串口数据发送。
 - **主控 MCU（TI M0）**：主控操作、视觉数据接收及滚珠横杆步进电机控制。
+
+- **大疆图传**：运行画面传输与现场观察。
