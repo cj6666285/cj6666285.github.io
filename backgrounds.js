@@ -15,7 +15,10 @@
   function update(){
     const number=slides[current].dataset.number;
     if(backdrop.dataset.activeSlide!==number)backdrop.dataset.activeSlide=number;
-    status.textContent='背景 '+number+' / 06 · '+(paused()?'已暂停':'每 2 秒切换');
+    let next=(current+1)%slides.length;
+    for(let offset=1;offset<slides.length&&failed[next];offset++)next=(next+1)%slides.length;
+    const state=!initialized?'正在加载背景':!ready[next]?'正在加载下一张':'每 2 秒切换';
+    status.textContent='背景 '+number+' / 06 · '+(paused()?'已暂停':state);
     if(reduced.matches&&!allowReduced)status.textContent+='（系统减少动态效果）';
     play.textContent=paused()?'▶':'Ⅱ';
     play.setAttribute('aria-label',paused()?'播放背景轮播':'暂停背景轮播');
@@ -52,13 +55,21 @@
     try{
       if(slide.dataset.src){slide.src=slide.dataset.src;delete slide.dataset.src;}
       await slide.decode();ready[index]=true;
-      if(!initialized){select(index);initialized=true;schedule();}
+      if(!initialized&&(index===0||failed[0])){select(index);initialized=true;schedule();}
     }catch{failed[index]=true;}
+    update();
   }
-  // Decode the first image before starting the clock, then preload all five.
+  // Prioritize the next photo so the first transition does not compete with all five.
   (async()=>{
+    slides[1].fetchPriority='high';
+    const next=load(slides[1],1);
     await load(slides[0],0);
-    await Promise.allSettled(slides.slice(1).map((slide,index)=>load(slide,index+1)));
+    await next;
+    if(!initialized&&ready[1]){select(1);initialized=true;schedule();}
+    await Promise.allSettled(slides.slice(2).map((slide,index)=>{
+      slide.fetchPriority='auto';
+      return load(slide,index+2);
+    }));
     backdrop.dataset.loaded=String(ready.filter(Boolean).length);
   })();
   document.getElementById('background-prev').onclick=()=>{step(-1);schedule();};
