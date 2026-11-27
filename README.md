@@ -7,6 +7,7 @@ HTML、CSS 和原生 JavaScript，GitHub Pages 免费托管，无需构建。Mar
 ## 页面结构
 
 - 总览：“曼波大王个人网站”标题、个人介绍、3D 照片环形轮播、粒子背景、两行滚动兴趣标签。
+- 主页背景：六张插画每 5 秒顺序切换，使用淡入淡出过渡；“暂停动效”可暂停，系统减少动态效果时静态显示。
 - 项目档案：嵌入式与电源专题、封面文章卡片、分类搜索、正文和多级目录。
 - 关于：个人介绍，以及两个抖音、GitHub、QQ、微信的图标卡片。
 
@@ -23,6 +24,8 @@ HTML、CSS 和原生 JavaScript，GitHub Pages 免费托管，无需构建。Mar
 | data.js | 专题名称、封面和外观配置 |
 | index.html | 首页文案、个人介绍、GitHub 和两个抖音链接 |
 | fx.js | 轮播照片与动效参数 |
+| backgrounds.js | 主页背景切换间隔（顶部 intervalMs，单位毫秒） |
+| assets/images/home-background-01.webp ～ 06.webp | 六张主页背景，按编号顺序切换 |
 | assets/images/ | 照片、封面和正文配图 |
 | styles.css | 颜色、字体和布局 |
 | app.js | 分类、搜索、文章详情及页面切换 |
