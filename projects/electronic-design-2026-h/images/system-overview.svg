@@ -4,7 +4,7 @@
   <g font-family="Segoe UI,Microsoft YaHei,sans-serif">
     <text x="66" y="83" fill="#8b9993" font-size="18" letter-spacing="4">2026 / PROJECT H</text>
     <text x="66" y="143" fill="#eff3ed" font-size="44" font-weight="600">26年电赛H题</text>
-    <text x="66" y="181" fill="#8b9993" font-size="20">红外循迹 · 视觉识别 · 滚珠横杆控制</text>
+    <text x="66" y="181" fill="#8b9993" font-size="20">双 MCU（TI M0）＋ MaixCam Pro 视觉方案</text>
     <g fill="#151f20" stroke="#3d5042" stroke-width="1.5">
       <rect x="66" y="240" width="1068" height="145" rx="14"/>
       <rect x="66" y="445" width="300" height="152" rx="14"/>
@@ -12,7 +12,7 @@
       <rect x="834" y="445" width="300" height="152" rx="14"/>
     </g>
     <g fill="#c2ff6b" font-size="25" font-weight="600">
-      <text x="97" y="286">Hong_wai</text><text x="97" y="491">H_sj</text><text x="481" y="491">Task</text><text x="865" y="491">步进电机</text>
+      <text x="97" y="286">循迹 MCU · TI M0</text><text x="97" y="491">MaixCam Pro</text><text x="481" y="491">主控 MCU · TI M0</text><text x="865" y="491">步进电机</text>
     </g>
     <g fill="#eff3ed" font-size="21">
       <text x="97" y="326">六路红外 → 循迹误差 → 转向 PD → 左右轮速度 PI → 电机 PWM</text>
