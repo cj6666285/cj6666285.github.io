@@ -154,8 +154,9 @@ body:not(:has(#view-overview:not([hidden]))) .home-backgrounds{display:none}
 .background-controls>span{margin-right:10px;padding:5px 9px;background:#080b0d99;border-radius:4px}
 .background-controls>button{display:grid;place-items:center;width:31px;height:29px;background:#080b0dc9;border:1px solid #4b5c42;border-radius:4px;color:#bedc9e;font-size:13px}
 .background-controls>button:hover{border-color:#bfdc9e;background:#1a2716}
+.platform-gitee{background:#c71d23;border-color:#c71d23}
 .platform-xianyu{background:#ffe34f;border-color:#ffe34f}
-.connect-card:last-child{grid-column:span 2}
+.connect-card:last-child{grid-column:span 3}
 @media(max-width:1150px) and (min-width:951px){.header{gap:12px}.social-links{gap:3px}.social-links .github-link{padding:6px 5px;font-size:8px}.header nav a{padding:7px}}
 @media(max-width:850px){.connect-card:last-child{grid-column:span 1}}
 @media(max-width:600px){.background-controls{margin:-20px 0 22px;justify-content:flex-start;font-size:10px;gap:6px}.background-controls>span{margin-right:auto;padding:5px 7px}.background-controls>button{width:30px}.connect-card:last-child{grid-column:1}}
