@@ -55,6 +55,20 @@
       return element;
     }
     const fragment=document.createDocumentFragment();parsed.body.childNodes.forEach(child=>fragment.append(clean(child)));
+    // A standalone Markdown link with the title "演示视频" becomes a video card.
+    fragment.querySelectorAll('p>a[title="演示视频"][href]').forEach(link=>{
+      const paragraph=link.parentElement;
+      if(paragraph.textContent.trim()!==link.textContent.trim()||paragraph.children.length!==1)return;
+      const title=link.textContent.trim();
+      const span=(className,text)=>{const element=document.createElement('span');element.className=className;if(text)element.textContent=text;return element;};
+      const play=span('video-card-play');play.setAttribute('aria-hidden','true');
+      const copy=span('video-card-copy'),badge=span('video-card-badge','项目演示 · VIDEO');
+      const label=span('video-card-title',title),hint=span('video-card-hint',new URL(link.href).hostname.endsWith('.douyin.com')?'点击前往抖音，观看实车演示':'点击打开演示视频');
+      copy.append(badge,label,hint);
+      const arrow=span('video-card-arrow','↗');arrow.setAttribute('aria-hidden','true');
+      link.className='article-video-card';link.removeAttribute('title');link.replaceChildren(play,copy,arrow);
+      paragraph.classList.add('video-card-paragraph');
+    });
     fragment.querySelectorAll('img').forEach(img=>{
       const link=document.createElement('a');link.href=img.src;link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label','打开原图：'+img.alt);
       img.replaceWith(link);link.append(img);link.className='markdown-image-link';

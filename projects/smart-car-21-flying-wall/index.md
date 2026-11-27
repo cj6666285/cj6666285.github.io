@@ -13,15 +13,15 @@ preview: false
 
 ## 智能车算法与功能框架
 
-**[▶ 观看智能车演示视频（抖音） ↗](https://v.douyin.com/c8LZsg6DClM/)**
-
-![飞檐走壁智能车实物，展示车体、电路板及接线](./images/smart-car-hardware.webp)
-
-*智能车实物：车体、电路板与接线细节。*
+[观看智能车演示视频](https://v.douyin.com/c8LZsg6DClM/ "演示视频")
 
 ![第二十一届智能车竞赛飞檐走壁项目现场](./images/competition-scene.webp)
 
 *竞赛现场：飞檐走壁项目区域。*
+
+![飞檐走壁智能车实物，展示车体、电路板及接线](./images/smart-car-hardware.webp)
+
+*智能车实物：车体、电路板与接线细节。*
 
 ## 一、整体算法
 
