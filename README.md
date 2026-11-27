@@ -7,9 +7,9 @@ HTML、CSS 和原生 JavaScript，GitHub Pages 免费托管，无需构建。Mar
 ## 页面结构
 
 - 总览：“曼波大王个人网站”标题、个人介绍、3D 照片环形轮播、粒子背景、两行滚动兴趣标签。
-- 主页背景：六张插画每 5 秒顺序切换，使用淡入淡出过渡；“暂停动效”可暂停，系统减少动态效果时静态显示。
+- 主页背景：六张插画按 06→05→04→03→02→01 倒序循环，每 2 秒切换；主页的背景编号和播放按钮可查看状态、暂停或手动切图。
 - 项目档案：嵌入式与电源专题、封面文章卡片、分类搜索、正文和多级目录。
-- 关于：个人介绍，以及两个抖音、GitHub、QQ、微信的图标卡片。
+- 关于：个人介绍，以及两个抖音、GitHub、QQ、微信、闲鱼的图标卡片。
 
 已移除独立的记录模板页面、开发日志栏目和首页三张模板入口卡片。不提供留言板，不需要配置数据库。
 
@@ -25,12 +25,14 @@ HTML、CSS 和原生 JavaScript，GitHub Pages 免费托管，无需构建。Mar
 | index.html | 首页文案、个人介绍、GitHub 和两个抖音链接 |
 | fx.js | 轮播照片与动效参数 |
 | backgrounds.js | 主页背景切换间隔（顶部 intervalMs，单位毫秒） |
-| assets/images/home-background-01.webp ～ 06.webp | 六张主页背景，按编号顺序切换 |
+| assets/images/home-background-01.webp ～ 06.webp | 六张主页背景，按编号倒序切换 |
 | assets/images/ | 照片、封面和正文配图 |
 | styles.css | 颜色、字体和布局 |
 | app.js | 分类、搜索、文章详情及页面切换 |
 
 修改仓库 main 分支根目录下的文件并提交后，GitHub Pages 会自动重新部署。等待 Actions 中的 Pages 部署成功再刷新网站。
+
+文章随 HTML 附带一份已发布内容，网络慢或 Markdown 请求超时时仍可阅读；网页会在后台读取最新 Markdown 并更新。发布前可运行 `python scripts/update-project-snapshot.py`，刷新这份备用内容。直接修改 GitHub 上的 Markdown 也会由后台请求读取，但建议同步更新备用内容以保证弱网访问。
 
 ## 添加项目：一篇 Markdown ＋ 一个照片文件夹
 

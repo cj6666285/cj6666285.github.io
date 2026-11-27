@@ -107,12 +107,19 @@
   },true);
   async function loadProjects(){
     if(loadProjects.pending)return;loadProjects.pending=true;contentLoading=true;contentWarning='';renderProjects();
-    try{
-      const result=await window.LAB_MARKDOWN.load();projects.splice(0,projects.length,...result.projects);previews.splice(0,previews.length,...result.previews);
+    const version=(loadProjects.version||0)+1;loadProjects.version=version;
+    const apply=result=>{
+      if(loadProjects.version!==version)return;
+      projects.splice(0,projects.length,...result.projects);previews.splice(0,previews.length,...result.previews);
       categoryNames.splice(0,categoryNames.length,...new Set([...configuredCategories.map(c=>c.name),...projects.map(p=>p.category),...previews.map(p=>p.category)].filter(Boolean)));
       if(!categoryNames.includes(category))category=categoryNames[0]||'';
-      contentWarning=result.warnings.length?'部分文章未能读取，请重试。'+result.warnings.join('；'):'';
-    }catch(error){contentWarning=location.protocol==='file:'?'请通过本地 HTTP 服务或线上网站读取文章，双击 HTML 无法读取 Markdown。':'项目文章暂时无法读取，请重试。'+error.message;}
+      contentWarning=result.warnings.length?'有 '+result.warnings.length+' 篇文章暂时无法更新，可稍后重试。':'';
+      if(result.warnings.length)console.warn('文章读取详情：',result.warnings);
+      contentLoading=false;renderProjects();currentProject=null;if(location.hash.startsWith('#project'))navigate();
+    };
+    try{
+      apply(await window.LAB_MARKDOWN.load({onUpdate:apply}));
+    }catch(error){contentWarning=location.protocol==='file:'?'请通过本地 HTTP 服务或线上网站读取文章。':'网络暂时不稳定，文章未能读取，请稍后重试。';console.warn('文章读取失败：',error);}
     finally{contentLoading=false;loadProjects.pending=false;renderProjects();currentProject=null;if(location.hash.startsWith('#project'))navigate();}
   }
   $('#retry-projects').onclick=loadProjects;

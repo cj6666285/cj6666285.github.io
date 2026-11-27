@@ -96,38 +96,88 @@
     return roots;
   }
   async function get(url,json=false){
-    const response=await fetch(url,{cache:'no-cache',signal:AbortSignal.timeout(15000)});
-    if(!response.ok)throw new Error('HTTP '+response.status);
-    return json?response.json():response.text();
+    for(let attempt=0;attempt<2;attempt++){
+      const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
+      try{
+        const response=await fetch(url,{cache:'no-cache',signal:controller.signal,priority:'high'});
+        if(!response.ok){const error=new Error('HTTP '+response.status);error.retryable=response.status>=500;throw error;}
+        return await (json?response.json():response.text());
+      }catch(error){if(error.retryable===false||attempt===1)throw error;}
+      finally{clearTimeout(timer);}
+    }
   }
-  async function load(){
-    const manifestUrl=new URL('./projects/index.json',location.href);
-    const files=await get(manifestUrl,true);
+  function validateFiles(files,manifestUrl){
     if(!Array.isArray(files)||files.some(file=>typeof file!=='string'))throw new Error('projects/index.json 应为文章路径数组');
-    const projects=[],previews=[],warnings=[],ids=new Set();
-    const results=await Promise.allSettled(files.map(async file=>{
+    files.forEach(file=>{
       const sourceUrl=new URL(file,manifestUrl);
       if(sourceUrl.origin!==manifestUrl.origin||!sourceUrl.pathname.startsWith(manifestUrl.pathname.replace(/index\.json$/,''))||!sourceUrl.pathname.endsWith('.md')||sourceUrl.search||sourceUrl.hash)throw new Error('文章路径必须位于 projects/ 文件夹内并以 .md 结尾');
-      const {meta,body}=metadata(await get(sourceUrl));
-      if(meta.draft===true)return null;
-      const folder=decodeURIComponent(sourceUrl.pathname.split('/').slice(-2,-1)[0]);
-      const id=meta.id||folder;
-      if(typeof id!=='string'||!id||/[\/#?]/.test(id))throw new Error('项目 id 或文件夹名不合法');
-      const p={id,title:meta.title.trim(),category:meta.category.trim(),summary:typeof meta.summary==='string'?meta.summary:'',tags:meta.tags||[],date:meta.date,status:meta.status,discipline:meta.discipline,preview:meta.preview===true,sourceUrl:sourceUrl.href};
-      p.cover=meta.cover?safeUrl(meta.cover,sourceUrl):undefined;
-      p.repository=meta.repository?safeUrl(meta.repository,sourceUrl):undefined;
-      p.designUrl=meta.designUrl?safeUrl(meta.designUrl,sourceUrl):undefined;
-      p.readMinutes=Math.max(1,Math.ceil(body.replace(/```[\s\S]*?```/g,'').length/450));
-      p.sections=sections(cleanMarkdown(body,sourceUrl),p.title);
-      return p;
-    }));
-    results.forEach((result,index)=>{
-      if(result.status==='rejected'){warnings.push(files[index]+'：'+result.reason.message);return;}
-      const p=result.value;if(!p)return;
-      if(ids.has(p.id)){warnings.push(files[index]+'：项目 id 重复');return;}ids.add(p.id);
-      (p.preview?previews:projects).push(p);
     });
+    return files;
+  }
+  function parseProject(text,sourceUrl){
+    const {meta,body}=metadata(text);
+    if(meta.draft===true)return null;
+    const folder=decodeURIComponent(sourceUrl.pathname.split('/').slice(-2,-1)[0]),id=meta.id||folder;
+    if(typeof id!=='string'||!id||/[\/#?]/.test(id))throw new Error('项目 id 或文件夹名不合法');
+    const p={id,title:meta.title.trim(),category:meta.category.trim(),summary:typeof meta.summary==='string'?meta.summary:'',tags:meta.tags||[],date:meta.date,status:meta.status,discipline:meta.discipline,preview:meta.preview===true,sourceUrl:sourceUrl.href};
+    p.cover=meta.cover?safeUrl(meta.cover,sourceUrl):undefined;
+    p.repository=meta.repository?safeUrl(meta.repository,sourceUrl):undefined;
+    p.designUrl=meta.designUrl?safeUrl(meta.designUrl,sourceUrl):undefined;
+    p.readMinutes=Math.max(1,Math.ceil(body.replace(/```[\s\S]*?```/g,'').length/450));
+    p.sections=sections(cleanMarkdown(body,sourceUrl),p.title);
+    return p;
+  }
+  function parseSources(files,sources,manifestUrl){
+    const projects=[],previews=[],warnings=[],ids=new Set();
+    for(const file of files)try{
+      if(typeof sources[file]!=='string')throw new Error('文章暂时无法读取');
+      const p=parseProject(sources[file],new URL(file,manifestUrl));if(!p)continue;
+      if(ids.has(p.id))throw new Error('项目 id 重复');ids.add(p.id);
+      (p.preview?previews:projects).push(p);
+    }catch(error){warnings.push(file+'：'+error.message);}
     return {projects,previews,warnings};
+  }
+  async function refresh(manifestUrl,snapshot){
+    let files;
+    try{files=validateFiles(await get(manifestUrl,true),manifestUrl);}
+    catch(error){if(snapshot)return snapshot;throw error;}
+    const sources={};let cursor=0;
+    // Limit simultaneous requests so background pictures cannot crowd out articles.
+    await Promise.all(Array.from({length:Math.min(2,files.length)},async()=>{
+      while(cursor<files.length){
+        const file=files[cursor++];
+        try{sources[file]=await get(new URL(file,manifestUrl));}
+        catch(error){
+          if(error.retryable!==false&&typeof snapshot?.sources?.[file]==='string')sources[file]=snapshot.sources[file];
+        }
+      }
+    }));
+    return {files,sources};
+  }
+  async function load({onUpdate}={}){
+    const manifestUrl=new URL('./projects/index.json',location.href);
+    let snapshot=null;
+    try{
+      const data=JSON.parse(document.getElementById('project-snapshot')?.textContent||'null');
+      if(data&&data.sources&&typeof data.sources==='object'){
+        validateFiles(data.files,manifestUrl);
+        if(data.files.every(file=>typeof data.sources[file]==='string'))snapshot=data;
+      }
+    }catch{}
+    if(snapshot){
+      // Ship the published Markdown with the HTML, then fetch edits in the background.
+      // A slow GitHub Pages connection must never erase a readable published article.
+      const result=parseSources(snapshot.files,snapshot.sources,manifestUrl);
+      if(result.warnings.length===0){
+        void refresh(manifestUrl,snapshot).then(fresh=>{
+          if(JSON.stringify(fresh.files)!==JSON.stringify(snapshot.files)||fresh.files.some(file=>fresh.sources[file]!==snapshot.sources[file]))
+            onUpdate?.(parseSources(fresh.files,fresh.sources,manifestUrl));
+        }).catch(error=>console.warn('文章更新暂时不可用，继续显示已发布内容。',error));
+        return result;
+      }
+    }
+    const fresh=await refresh(manifestUrl,null);
+    return parseSources(fresh.files,fresh.sources,manifestUrl);
   }
   window.LAB_MARKDOWN={load};
 })();
