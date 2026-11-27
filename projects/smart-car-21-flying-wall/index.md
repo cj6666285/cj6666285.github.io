@@ -13,6 +13,8 @@ preview: false
 
 ## 智能车算法与功能框架
 
+**[▶ 观看智能车演示视频（抖音） ↗](https://v.douyin.com/c8LZsg6DClM/)**
+
 ![飞檐走壁智能车实物，展示车体、电路板及接线](./images/smart-car-hardware.webp)
 
 *智能车实物：车体、电路板与接线细节。*
