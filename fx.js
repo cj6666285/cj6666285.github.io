@@ -153,7 +153,7 @@
     const stopped=paused();document.body.classList.toggle('motion-disabled',stopped);
     toggle.disabled=reduced.matches;toggle.title=reduced.matches?'系统已开启减少动态效果，可通过左右按钮手动切图。':'';
     toggle.setAttribute('aria-pressed',String(stopped));toggle.setAttribute('aria-label',stopped?'播放页面动效':'暂停页面动效');toggle.textContent=stopped?'▶ 播放动效':'Ⅱ 暂停动效';
-    $('#motion-label').textContent=stopped?'ORBIT / STILL':'ORBIT / AUTO ROTATE';
+    $('#motion-label').textContent=stopped?'轮播已暂停':'自动轮播';
     drawGallery();drawParticles(0,performance.now());if(canAnimate())raf=requestAnimationFrame(frame);
   }
   toggle.addEventListener('click',()=>{if(reduced.matches){toggle.textContent='系统已开启减少动态效果';return;}userPaused=!userPaused;try{sessionStorage.setItem('cj-lab-motion-paused',String(userPaused));}catch{}synchronize();});

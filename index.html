@@ -4,8 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="曼波大王的嵌入式软件与硬件项目记录：项目档案、调试过程与技术复盘。">
 <meta name="theme-color" content="#f8f7f4"><title>曼波大王 · 嵌入式项目记录</title>
-<link rel="icon" href="./favicon.svg?v=light-1" type="image/svg+xml"><link rel="stylesheet" href="./styles.css?v=light-1">
-<script src="./data.js?v=light-1" defer></script><script src="./assets/vendor/marked.umd.js" defer></script><script src="./markdown.js?v=video-card-1" defer></script><script src="./app.js?v=markdown-1" defer></script><script src="./fx.js?v=light-1" defer></script>
+<link rel="icon" href="./favicon.svg?v=light-1" type="image/svg+xml"><link rel="stylesheet" href="./styles.css?v=light-2">
+<script src="./data.js?v=light-1" defer></script><script src="./assets/vendor/marked.umd.js" defer></script><script src="./markdown.js?v=video-card-1" defer></script><script src="./app.js?v=markdown-1" defer></script><script src="./fx.js?v=light-2" defer></script>
 </head>
 <body>
 <canvas id="particle-background" aria-hidden="true"></canvas>
@@ -16,15 +16,14 @@
 <section id="view-overview" class="view" aria-labelledby="overview-title">
   <div class="hero">
     <div class="hero-copy">
-      <div class="eyebrow"><span class="signal"></span> 曼波大王的个人实验室 <span class="eyebrow-slash">/</span> EST. 2026</div>
+      <div class="eyebrow">个人记录 <span class="eyebrow-slash">/</span> 项目与日常</div>
       <h1 id="overview-title" class="personal-title"><span class="hero-line">曼波大王</span><br><span class="hero-accent">个人网站</span></h1>
       <div class="hero-chinese">让想法，接入现实<span>_</span></div>
       <p>不是臭企鹅，胜似臭企鹅。<br>记录嵌入式软件、硬件设计，以及每一次突破的过程。</p>
       <div class="actions"><a class="button primary" href="#projects">进入项目档案 <span>↗</span></a><a class="button secondary" href="#about">关于我 <span>↗</span></a></div>
-      <div class="hero-caption"><span><i></i> INDEPENDENT EXPLORER</span><span>SOFTWARE × HARDWARE</span></div>
     </div>
     <div class="gallery-module orbit-module">
-      <div class="gallery-bar"><span><i></i> MEMORY ORBIT</span><span class="gallery-coordinate">6 IMAGES / 360° VIEW</span></div>
+      <div class="gallery-bar"><span>日常片段</span><span class="gallery-coordinate">6 张照片</span></div>
       <div class="orbit-stage" id="orbit-stage" role="region" aria-label="自动旋转的三维照片环形轮播" aria-roledescription="轮播">
         <div class="orbit-halo" aria-hidden="true"></div><div class="orbit-floor" aria-hidden="true"><i></i><i></i><i></i></div>
         <div class="orbit-cross cross-left" aria-hidden="true">＋</div><div class="orbit-cross cross-right" aria-hidden="true">＋</div>
@@ -32,7 +31,7 @@
         <span class="orbit-stage-label" aria-hidden="true">PERSONAL GALLERY / 曼波大王</span>
       </div>
       <div class="orbit-controls"><button id="orbit-prev" class="orbit-arrow" aria-label="上一张照片">←</button><div class="orbit-selection" id="orbit-selection" role="group" aria-label="选择照片"></div><button id="orbit-next" class="orbit-arrow" aria-label="下一张照片">→</button></div>
-      <div class="gallery-bottom"><span><i class="live-led"></i><span id="motion-label">ORBIT / AUTO ROTATE</span></span><button id="motion-toggle" class="motion-toggle" aria-pressed="false" aria-label="暂停页面动效">Ⅱ 暂停动效</button></div>
+      <div class="gallery-bottom"><span><span id="motion-label">自动轮播</span></span><button id="motion-toggle" class="motion-toggle" aria-pressed="false" aria-label="暂停页面动效">Ⅱ 暂停动效</button></div>
     </div>
   </div>
   <section class="interest-marquee" aria-labelledby="interest-title">
@@ -42,7 +41,7 @@
   </section>
 </section>
 <section id="view-projects" class="view" hidden aria-labelledby="projects-title">
-<div class="eyebrow">PROJECT JOURNAL / DESIGN · BUILD · DOCUMENT</div>
+<div class="eyebrow">PROJECTS</div>
 <div class="page-head"><div><h1 id="projects-title">项目与实践<span class="title-dot">.</span></h1><p>从电路到代码，用一篇篇记录串起完整的实践过程。</p></div></div>
 <div id="project-categories" class="category-grid" aria-label="项目专题"></div>
 <div id="project-load-status" class="project-load-status" role="status"><p id="project-load-message">正在读取 Markdown 文章…</p><button id="retry-projects" class="button secondary" type="button" hidden>重新读取</button></div>
@@ -53,7 +52,7 @@
 </section>
 <section id="view-project" class="view" hidden aria-label="项目详情"><a class="back" href="#projects">← 返回项目档案</a><article id="project-detail"></article></section>
 <section id="view-about" class="view" hidden aria-labelledby="about-title">
-<div class="eyebrow">ABOUT ME / FIND ME HERE</div>
+<div class="eyebrow">ABOUT</div>
 <div class="connect-intro"><div><h1 id="about-title">你好，我是曼波大王<span class="title-dot">.</span></h1><p>代码、电路，还有日常里的小小灵感。<br>在这里记录实践，也在这些地方与你相遇。</p></div><span class="connect-intro-note"><i class="signal"></i> LET’S STAY CONNECTED</span></div>
 <div class="connect-grid" aria-label="社交平台与联系方式">
 <a class="connect-card connect-card-wide" href="https://v.douyin.com/aUGkqMEhm6Y/" target="_blank" rel="noopener noreferrer">
