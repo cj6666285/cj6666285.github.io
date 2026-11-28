@@ -165,3 +165,11 @@ CONFIG.cycleSeconds 控制旋转速度；CONFIG.particles.desktop / mobile 控�
 当前从 main 分支根目录发布。更新时将本目录中的站点文件放在仓库根目录，保留 .nojekyll、markdown.js、fx.js、assets/ 与 projects/。
 
 若切换为 GitHub Actions 发布，可使用 .github/workflows/deploy.yml，并在 Settings → Pages 中选择 GitHub Actions。两种发布方式任选一种。
+
+## 图片加载优化
+
+- 首页背景和旋转相册只在进入总览时下载；直接打开文章不会下载这些图片。
+- 相册使用 480 像素缩略图，点击大图时才读取原文件。
+- 背景与项目照片提供不同尺寸，浏览器按显示宽度和屏幕像素密度选择；正文图片保留延迟加载，点击仍打开原图。
+- images.js 保存响应式图片映射。新增的照片没有映射时仍可正常显示；可用 Python（需 Pillow）运行 `python scripts/generate-image-variants.py` 生成小尺寸版本并刷新映射，再一起上传。
+- 原始图片保留，优化版本使用 -w宽度.webp 文件名。静态文件由浏览器正常缓存，更新照片时使用新文件名或版本号。

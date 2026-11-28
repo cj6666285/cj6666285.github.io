@@ -19,7 +19,7 @@
     if(typeof value!=='string'||!value.trim())return null;
     try{const parsed=new URL(value,location.href);return ['http:','https:'].includes(parsed.protocol)||(location.protocol==='file:'&&parsed.protocol==='file:')?parsed.href:null;}catch{return null;}
   }
-  function makeImage(src,alt,className){const safe=imageUrl(src);if(!safe)return null;const img=node('img',className);img.src=safe;img.alt=alt||'';img.loading='lazy';img.decoding='async';return img;}
+  function makeImage(src,alt,className){const safe=imageUrl(src);if(!safe)return null;const img=node('img',className);img.alt=alt||'';img.loading='lazy';img.decoding='async';if(window.LAB_IMAGES)window.LAB_IMAGES(img,safe,'(max-width: 600px) calc(100vw - 44px), (max-width: 1150px) 44vw, 420px');else img.src=safe;return img;}
   function sectionBody(container,section){
     if(section.markdownNodes){container.append(section.markdownNodes.cloneNode(true));return;}
     if(section.text)container.append(node('p','',section.text));

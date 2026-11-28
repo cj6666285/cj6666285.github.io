@@ -47,7 +47,8 @@
       if(tag==='img'){
         const src=safeUrl(source.getAttribute('src')||'',base);
         if(!src)return document.createTextNode(source.alt||'');
-        element.src=src;element.alt=source.alt||'';element.loading='lazy';element.decoding='async';
+        element.alt=source.alt||'';element.loading='lazy';element.decoding='async';
+        if(window.LAB_IMAGES)window.LAB_IMAGES(element,src);else element.src=src;
         if(source.title)element.title=source.title;
       }
       if(tag==='ol'&&/^\d+$/.test(source.getAttribute('start')||''))element.start=Number(source.getAttribute('start'));

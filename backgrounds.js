@@ -9,7 +9,7 @@
   if(!slides.length)return;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const ready=slides.map(()=>false),failed=slides.map(()=>false);
-  let current=0,timer=0,initialized=false,userPaused=false,allowReduced=false;
+  let current=0,timer=0,initialized=false,userPaused=false,allowReduced=false,started=false;
   const paused=()=>userPaused||(reduced.matches&&!allowReduced)||document.body.classList.contains('motion-disabled')&&!(reduced.matches&&allowReduced);
   const running=()=>initialized&&!overview.hidden&&!document.hidden&&!paused()&&!document.querySelector('dialog[open]');
   function update(){
@@ -49,29 +49,31 @@
     const active=!overview.hidden;
     if(document.body.classList.contains('has-home-background')!==active)
       document.body.classList.toggle('has-home-background',active);
+    if(active)startLoading();
     schedule();
   }
   async function load(slide,index){
     try{
-      if(slide.dataset.src){slide.src=slide.dataset.src;delete slide.dataset.src;}
+      if(slide.dataset.src){
+        if(window.LAB_IMAGES)window.LAB_IMAGES(slide,slide.dataset.src,'100vw');else slide.src=slide.dataset.src;
+        delete slide.dataset.src;
+      }
       await slide.decode();ready[index]=true;
       if(!initialized&&(index===0||failed[0])){select(index);initialized=true;schedule();}
     }catch{failed[index]=true;}
     update();
   }
-  // Prioritize the next photo so the first transition does not compete with all five.
-  (async()=>{
-    slides[1].fetchPriority='high';
-    const next=load(slides[1],1);
+  // Download homepage images only on the homepage, with bounded concurrency.
+  async function startLoading(){
+    if(started)return;started=true;
     await load(slides[0],0);
-    await next;
+    await load(slides[1],1);
     if(!initialized&&ready[1]){select(1);initialized=true;schedule();}
-    await Promise.allSettled(slides.slice(2).map((slide,index)=>{
-      slide.fetchPriority='auto';
-      return load(slide,index+2);
-    }));
+    let next=2;
+    const worker=async()=>{while(next<slides.length){const index=next++;await load(slides[index],index);}};
+    await Promise.allSettled([worker(),worker()]);
     backdrop.dataset.loaded=String(ready.filter(Boolean).length);
-  })();
+  }
   document.getElementById('background-prev').onclick=()=>{step(-1);schedule();};
   document.getElementById('background-next').onclick=()=>{step(1);schedule();};
   play.onclick=()=>{

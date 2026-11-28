@@ -27,7 +27,15 @@
   let focused=false,hovered=false,dragging=false,dragStart=0,dragAngle=0,dragMoved=false,suppressClick=false;
   let active=0,viewportWidth=innerWidth,viewportHeight=innerHeight,particles=[];
   const pointer={x:-10000,y:-10000};
-  const cardNodes=[],selectors=[],photoStates=[],retryPhotos=[];
+  const cardNodes=[],selectors=[],photoStates=[],retryPhotos=[],loadPhotos=[];
+  let galleryImagesStarted=false;
+  function startGalleryImages(){
+    if(galleryImagesStarted||$('#view-overview').hidden)return;
+    galleryImagesStarted=true;
+    let next=0;
+    const worker=async()=>{while(next<loadPhotos.length){const load=loadPhotos[next++];await load();}};
+    Promise.allSettled([worker(),worker()]);
+  }
   const step=2*Math.PI/CONFIG.images.length;
   stage.style.perspective=CONFIG.perspective+'px';
   container.style.perspective=CONFIG.perspective+'px';
@@ -52,7 +60,7 @@
     const frame=document.createElement('span');frame.className='orbit-image-frame';
     // All six images belong to one moving gallery. Native lazy loading can defer
     // images behind the 3D stage until after their cards have rotated forward.
-    const img=document.createElement('img');img.alt=photo.alt;img.width=photo.width;img.height=photo.height;img.draggable=false;img.decoding='async';img.loading='eager';img.fetchPriority=index===0?'high':'auto';
+    const img=document.createElement('img');img.alt=photo.alt;img.width=photo.width;img.height=photo.height;img.draggable=false;img.decoding='async';img.loading='eager';img.fetchPriority=index===0?'high':'low';
     const status=document.createElement('span');status.className='orbit-image-status';status.setAttribute('role','status');
     frame.append(img,status);
     function imageState(state){
@@ -65,7 +73,11 @@
     img.addEventListener('load',async()=>{try{await img.decode();}catch{}if(img.naturalWidth)imageState('ready');else imageState('error');});
     img.addEventListener('error',()=>imageState('error'));
     retryPhotos[index]=()=>{imageState('loading');img.src=photo.src+(photo.src.includes('?')?'&':'?')+'retry='+Date.now();};
-    imageState('loading');img.src=photo.src;
+    imageState('loading');
+    loadPhotos.push(()=>new Promise(resolve=>{
+      img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true});
+      img.src=photo.src.replace(/\.webp$/, '-w480.webp');
+    }));
     const caption=document.createElement('span');caption.className='orbit-caption';
     const number=document.createElement('span');number.textContent=String(index+1).padStart(2,'0');
     const label=document.createElement('span');label.textContent=photo.label;
@@ -149,6 +161,7 @@
     drawParticles(dt,now);raf=requestAnimationFrame(frame);
   }
   function synchronize(){
+    startGalleryImages();
     if(raf){cancelAnimationFrame(raf);raf=0;}last=0;
     const stopped=paused();document.body.classList.toggle('motion-disabled',stopped);
     toggle.disabled=reduced.matches;toggle.title=reduced.matches?'系统已开启减少动态效果，可通过左右按钮手动切图。':'';
